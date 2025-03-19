@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .background-darkBlack_light100 {
+    @apply bg-black dark:bg-light-100;
+  }
+  .background-light100_dark100 {
+    @apply bg-light-100 dark:bg-dark-100;
+  }
+
+  .background-light200_dark200 {
+    @apply bg-light-200 dark:bg-dark-200;
+  }
+
+  .background-light300_dark200 {
+    @apply bg-light-300 dark:bg-dark-200;
+  }
+  .background-dark400_light850 {
+    @apply dark:bg-dark-400 bg-light-850;
+  }
+
+  .background-light900_dark200 {
+    @apply bg-light-900 dark:bg-dark-200;
+  }
+
+  .text-darkBlack_light100 {
+    @apply text-black dark:text-light-100;
+  }
+
+  .text-light400_light100 {
+    @apply text-light-400 dark:text-light-100;
+  }
+  .text-light500_light100 {
+    @apply text-light-500 dark:text-light-100;
+  }
+  .text-dark500_light100 {
+    @apply text-dark-500 dark:text-light-100;
+  }
+
+  .banner-gradient {
+    background: linear-gradient(to top, #ffffff 0%, #ffffff 100%);
+  }
+
+  .h1-bold {
+    @apply text-[35px] font-extrabold tracking-[-1%] !leading-[130%] max-sm:text-[28px];
+  }
+}

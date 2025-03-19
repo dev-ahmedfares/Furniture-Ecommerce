@@ -1,15 +1,74 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import {
+  DM_Sans,
+  Geist,
+  Geist_Mono,
+  Inter,
+  Montserrat,
+  Oswald,
+  Rubik,
+} from "next/font/google";
 import "./globals.css";
+import localFont from "next/font/local";
+import { ThemeProvider } from "@/components/shared/ThemeProvider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const mont = Montserrat({
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-mont",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const rubik = Rubik({
+  variable: "--font-rubik",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const dmSans = DM_Sans({
+  variable: "--font-dmSans",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const gilroy = localFont({
+  src: [
+    {
+      path: "../public/fonts/Gilroy-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Gilroy-Medium.ttf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Gilroy-SemiBold.ttf",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Gilroy-Bold.ttf",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Gilroy-ExtraBold.ttf",
+      weight: "800",
+      style: "normal",
+    },
+  ],
+  variable: "--font-gilroy",
+});
+
+const agency = localFont({
+  src: [{ path: "../public/fonts/Agency.ttf", weight: "400", style: "normal" }],
+  variable: "--font-agency",
 });
 
 export const metadata: Metadata = {
@@ -23,9 +82,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${rubik.variable} ${inter.variable} ${dmSans.variable} ${mont.variable} ${gilroy.variable} ${agency.variable}`}
+      >
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
