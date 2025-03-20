@@ -8,13 +8,15 @@ function ToggleMenubar({
   setShowMenu,
   showMenu,
   btnChild,
-  customStyle
+  customStyle,
+  btnStyle
 }: {
   children: React.ReactNode;
   btnChild: React.ReactNode;
   setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;
   showMenu: boolean;
   customStyle?:string;
+  btnStyle?:string;
 }) {
   return (
     <div className={customStyle}>
@@ -22,7 +24,7 @@ function ToggleMenubar({
         onClick={() => setShowMenu((curr: boolean) => !curr)}
         variant={"ghost"}
         size={"icon"}
-        className="  [&_svg]:!size-6"
+        className={`${btnStyle}  [&_svg]:!size-6`}
       >
        {btnChild}
       </Button>

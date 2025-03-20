@@ -107,8 +107,8 @@ module.exports = {
       },
       backgroundImage: {
         bgHome: 'url("/assets/images/bg-home.png")',
-        blackOverlay:"linear-gradient(to bottom,rgba(11, 12, 12, 0) 60%,rgba(11, 12, 12, 1) 100%)",
-        lightOverlay:"linear-gradient(to bottom,rgba(255, 255, 255, 0) 60%,rgba(255, 255, 255, 1) 100%)",
+        blackOverlay:"linear-gradient(to bottom,rgba(11, 12, 12, 0) 70%,rgba(11, 12, 12, 1) 100%)",
+        lightOverlay:"linear-gradient(to bottom,rgba(255, 255, 255, 0) 70%,rgba(255, 255, 255,.7) 100%)",
       },
     },
   },

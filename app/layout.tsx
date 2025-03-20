@@ -13,7 +13,7 @@ import localFont from "next/font/local";
 import { ThemeProvider } from "@/components/shared/ThemeProvider";
 
 const mont = Montserrat({
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["300","400", "500", "600", "700", "800"],
   variable: "--font-mont",
   subsets: ["latin"],
 });
@@ -37,6 +37,11 @@ const dmSans = DM_Sans({
 
 const gilroy = localFont({
   src: [
+    {
+      path: "../public/fonts/Gilroy-Light.ttf",
+      weight: "300",
+      style: "normal",
+    },
     {
       path: "../public/fonts/Gilroy-Regular.ttf",
       weight: "400",

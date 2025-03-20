@@ -10,11 +10,12 @@ import SearchPage from "./SearchPage";
 import SearchIcon from "./SearchIcon";
 import Image from "next/image";
 
-function SearchContainer() {
+function SearchContainer({button,btnStyle}:{button:React.ReactNode,btnStyle?:string}) {
   const [showMenu, setShowMenu] = useState(false);
   return (
     <ToggleMenubar
-      btnChild={<SearchIcon />}
+    btnStyle={btnStyle}
+      btnChild={button}
       setShowMenu={setShowMenu}
       showMenu={showMenu}
     >

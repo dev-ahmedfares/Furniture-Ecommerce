@@ -9,7 +9,7 @@ const navLinks = [
     label: "Home",
   },
   {
-    path: "/shop",
+    path: "/categories",
     label: "Shop",
   },
 ];
