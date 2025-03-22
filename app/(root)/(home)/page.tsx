@@ -6,29 +6,12 @@ import React from "react";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { CarouselItem } from "@/components/ui/carousel";
 import CustomCarousel from "@/components/CustomCarousle";
+import { getQueryClient } from "@/lib/get-query-client";
+import { getCategories } from "@/lib/data-service";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import CategoriesList from "@/components/CategoriesList";
 
-const offers = [
-  {
-    label: "Living Room",
-    paragraph:
-      " Sofas, loveseats, armchairs, coffee tables, end tables, entertainment centers, bookshelves.",
-    path: "/categories",
-    img: "/assets/images/category-1.png",
-  },
-  {
-    label: "Bedroom",
-    paragraph:
-      "Beds, nightstands, dressers, chests of drawers, wardrobes, vanities.",
-    path: "/categories",
-    img: "/assets/images/category-2.png",
-  },
-  {
-    label: "Kitchen",
-    paragraph: "Kitchen cabinets, kitchen islands, dining tables, chairs.",
-    path: "/categories",
-    img: "/assets/images/category-3.png",
-  },
-];
+
 
 const features = [
   {
@@ -47,9 +30,18 @@ const features = [
     text: "Tools to help customers visualize furniture in their own spaces.",
   },
 ];
-function Page() {
+
+
+async function Page() {
+
+  const queryClient = getQueryClient();
+  await queryClient.prefetchQuery({
+    queryKey: ["categories"],
+    queryFn: getCategories,
+  });
+
   return (
-    <>
+    <HydrationBoundary state={dehydrate(queryClient)}>
       <section className="bg-bgHome bg-cover bg-no-repeat min-h-screen bg-center ">
         <div className="w-full min-h-screen flex flex-col items-center bg-lightOverlay dark:bg-blackOverlay ">
           <div className="text-center mt-52 text-light-100">
@@ -91,39 +83,7 @@ function Page() {
               <span>Categories</span>
             </h2>
             <div className="max-xl:flex-1">
-              <div
-                className="grid grid-cols-[repeat(1,240px)]  
-  sm:grid-cols-[repeat(2,240px)] 
-  lg:grid-cols-[repeat(3,240px)] gap-8 lg:gap-20 place-content-center "
-              >
-                {offers.map((offer, idx) => (
-                  <div key={idx} className="flex flex-col">
-                    <div className="relative w-[240px] h-[240px] rounded-[23px] overflow-hidden">
-                      <Image
-                        src={offer.img}
-                        fill
-                        alt={offer.label}
-                        className="object-cover"
-                      />
-                    </div>
-                    <h4 className="font-extrabold text-xl mt-4">
-                      {offer.label}
-                    </h4>
-                    <p className=" font-light leading-[185%] text-sm my-4">
-                      {offer.paragraph}
-                    </p>
-                    <Link
-                      href={offer.path}
-                      className="font-medium group capitalize text-primary-100 flex items-center gap-2 mt-auto"
-                    >
-                      <span>more info</span>
-                      <span className="group-hover:animate-pulse">
-                        <IoIosArrowRoundForward size={20} />
-                      </span>
-                    </Link>
-                  </div>
-                ))}
-              </div>
+              <CategoriesList/>
             </div>
           </div>
           <Image
@@ -250,7 +210,6 @@ function Page() {
                         <div className="absolute right-1/2 translate-x-[59px] -rotate-90 -top-[10px] bg-[radial-gradient(circle_at_100%_100%,_transparent_10px,_rgba(255,255,255,.70)_10px)] w-[10px] h-[10px]  "></div>
                       </div>
                     </div>
-                   
                   </div>
                 </CarouselItem>
               ))}
@@ -272,7 +231,7 @@ function Page() {
           className="absolute left-0 -bottom-32  xl:w-[200px] max-md:w-[120px] max-md:-bottom-20"
         />
       </section>
-    </>
+    </HydrationBoundary>
   );
 }
 

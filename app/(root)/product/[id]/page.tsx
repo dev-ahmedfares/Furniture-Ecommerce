@@ -1,60 +1,31 @@
+import AddToCartBtns from "@/components/shared/AddToCartBtns";
+import BtnPrimary from "@/components/shared/BtnPrimary";
+import SingleProductDetails from "@/components/SingleProductDetails";
+import { Button } from "@/components/ui/button";
+import { ParamsProps } from "@/types";
 import Image from "next/image";
 import React from "react";
+import { GoShareAndroid } from "react-icons/go";
 
-function Page() {
+async function Page({ params }: ParamsProps) {
+  const { id } = await params;
   return (
-    <section className=" py-24 pt-32 sm:pt-44">
-      <div className="container flex items-center gap-20">
-        <div className="flex-1 flex flex-col gap-2">
-          <div className="relative h-[200px] background-light600_dark200">
-            <Image
-              src="/assets/images/chair-1.png"
-              alt="product"
-              fill
-              className="object-contain"
-            />
-          </div>
-          <div className="flex gap-2">
-            <div className="flex-1 relative  background-light600_dark200 h-[160px]">
-              <Image
-                src="/assets/images/chair-1.png"
-                alt="product"
-                fill
-                className="object-contain"
-              />
-            </div>
-            <div className="flex-1 relative  background-light600_dark200 h-[160px]">
-              <Image
-                src="/assets/images/chair-1.png"
-                alt="product"
-                fill
-                className="object-contain"
-              />
-            </div>
-          </div>
-        </div>
-        <div className="flex-1">
-          <div className="flex justify-between items-center">
-            <h2 className="h1-bold text-darkBlack_light100">Baltsar Chair</h2>
-            <div className="relative text-light800_light100 font-semibold ps-2 text-2xl">
-              38,97
-              <span className="absolute -top-1 -left-1 text-sm">€</span>
-            </div>
-          </div>
-          <div className="font-medium leading-[160%] text-sm mt-8 min-h-[140px] border-b border-light-400 dark:border-light-100">
-            <p>
-              As the name suggests it, this is the jack of all trades of chairs;
-              it goes in any room, with any design and serves multiple purposes
-              that go with all upholstery options.
-            </p>
-            <span>L45 x D47 x H90 cm</span>
-          </div>
-          <div className="py-4 flex items-center justify-between">
-
-          </div>
-          
-        </div>
-      </div>
+    <section className=" py-24 pt-32 md:pt-44 min-h-screen container">
+      <SingleProductDetails id={id} />
+      <Image
+        alt="icon"
+        src="/assets/icons/single-svg-1.svg"
+        width={140}
+        height={100}
+        className="absolute right-0 max-md:hidden  -z-10 top-[10%] md:top-[15%]  2xl:w-[180px]"
+      />
+      <Image
+        alt="icon"
+        src="/assets/icons/single-svg-2.svg"
+        width={140}
+        height={100}
+        className="absolute left-0  max-md:hidden -z-10 bottom-[5%]  2xl:w-[180px]"
+      />
     </section>
   );
 }

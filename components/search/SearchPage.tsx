@@ -27,7 +27,7 @@ function SearchPage() {
 
           <Image
             src="/assets/icons/search-svg-1.svg"
-            className="  absolute -top-24 -z-10 left-1/2 -translate-x-1/2"
+            className="  absolute -top-16 md:-top-24 -z-10 left-1/2 -translate-x-1/2 max-md:w-[220px]"
             width={300}
             height={300}
             alt="icon"
@@ -55,7 +55,13 @@ function SearchPage() {
           <div className="bg-light-900 w-full h-full rounded-[20px] absolute -left-5 -top-4"></div>
           <div className="bg-light-900 w-full h-[60%] rounded-[20px] absolute -right-6 top-1/2 -translate-y-1/2"></div>
           <Image
-            src="/assets/images/search-img-1.png"
+            src="/assets/images/category-bg-1.png"
+            fill
+            alt="img"
+            className="object-cover rounded-[20px]  !w-[90%] blur-md"
+          />
+          <Image
+            src="/assets/images/category-bg-1.png"
             fill
             alt="img"
             className="object-cover rounded-[20px]"

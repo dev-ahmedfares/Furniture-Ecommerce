@@ -7,7 +7,8 @@ import { GrCheckmark } from "react-icons/gr";
 
 function ThemeSwitchMenu() {
   const { setTheme, theme } = useTheme();
-
+// TODO remove return or fix it
+if (!theme) return null;
 
   return (
     <div>

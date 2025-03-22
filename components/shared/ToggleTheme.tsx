@@ -5,12 +5,13 @@ import { MdSunny } from "react-icons/md";
 import { IoMoon } from "react-icons/io5";
 import { useTheme } from "next-themes";
 
-function ToggleTheme({className}:{className?:string}) {
+function ToggleTheme({ className }: { className?: string }) {
   const { setTheme, theme } = useTheme();
-
+  // TODO remove return or fix it
+  if (!theme) return null;
   return (
     <Button
-    className={className}
+      className={className}
       variant="ghost"
       size="icon"
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}

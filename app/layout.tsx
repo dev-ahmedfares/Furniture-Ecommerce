@@ -11,9 +11,10 @@ import {
 import "./globals.css";
 import localFont from "next/font/local";
 import { ThemeProvider } from "@/components/shared/ThemeProvider";
+import QueryProvider from "@/components/QueryProvider";
 
 const mont = Montserrat({
-  weight: ["300","400", "500", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700", "800"],
   variable: "--font-mont",
   subsets: ["latin"],
 });
@@ -92,7 +93,7 @@ export default function RootLayout({
         className={`${rubik.variable} ${inter.variable} ${dmSans.variable} ${mont.variable} ${gilroy.variable} ${agency.variable}`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
+          <QueryProvider>{children}</QueryProvider>
         </ThemeProvider>
       </body>
     </html>

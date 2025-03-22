@@ -1,6 +1,5 @@
 import Link from "next/link";
 import React from "react";
-import GlobalSearch from "../search/GlobalSearch";
 import CartBtn from "./CartBtn";
 import LinksList from "./LinksList";
 import Language from "./Language";
@@ -29,7 +28,7 @@ function Navbar() {
 
         <div>
           <MenubarContainer />
-        </div>
+        </div> 
       </div>
     </nav>
   );

@@ -27,7 +27,7 @@ function LinksList({ isCol,className }: { isCol?: boolean,className?:string }) {
               href={link.path}
               className={`${
                 isActive ? "!text-primary-100 font-semibold" : ""
-              } ${isCol ? "text-2xl" : ""} hover:font-semibold hover:!text-primary-100 transition-all dark:text-light-100`}
+              } ${isCol ? "text-2xl" : ""}  hover:!text-primary-100 duration-300 transition-all dark:text-light-100`}
             >
               {link.label}
             </Link>
