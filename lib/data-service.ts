@@ -36,7 +36,7 @@ export async function getCategoryAndProductsById({
       products: productsResponse.data,
     };
   } catch (error) {
-    throw axiosErrorHandler(error); // Returns a string
+    return axiosErrorHandler(error); 
   }
 }
 

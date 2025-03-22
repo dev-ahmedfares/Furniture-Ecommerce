@@ -21,13 +21,25 @@ import { PasswordInput } from "../shared/PasswordInput";
 import { AiOutlineWarning } from "react-icons/ai";
 import Link from "next/link";
 import { Checkbox } from "../ui/checkbox";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { signIn } from "@/lib/actions";
+import { ISignInProps } from "@/types";
+import { Spinner } from "../shared/Spinner";
+import {  useRouter } from "next/navigation";
 
 const formSchema = z.object({
-  email: z.string().min(2).max(50),
-  password: z.string().min(8),
+  email: z
+    .string()
+    .min(1, { message: "Email is required" })
+    .email({ message: "Invalid email format" }),
+  password: z
+    .string()
+    .min(1, { message: "Password is required" })
 });
 
 function SignInForm() {
+  const router = useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -36,10 +48,34 @@ function SignInForm() {
     },
   });
 
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["signUp"],
+    mutationFn: (data: ISignInProps) => signIn(data),
+    onSuccess: (data) => {
+      console.log(data);
+      if (data?.isSuccessful) {
+        form.reset();
+        toast.success("Successfully logged in");
+        router.push("/");
+      } else {
+        toast.error(data);
+      }
+    },
+
+    onError: (error) => {
+      if (error?.message) {
+        toast.error(error?.message);
+      } else if (typeof error === "string") {
+        toast.error(error);
+      } else {
+        toast.error("Un expected error");
+      }
+    },
+  });
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     console.log(values);
+    mutate({ data: values, userType: "personal" });
   }
   return (
     <div className="flex-1 flex flex-col  background-light200_dark200 p-8 rounded-[23px] min-h-[400px]">
@@ -101,7 +137,7 @@ function SignInForm() {
 
                     <div className="relative flex-1">
                       <PasswordInput
-                      idHtml={"signInPassword"}
+                        idHtml={"signInPassword"}
                         customStyle={`${
                           errors?.password ? "!text-red-100" : ""
                         }`}
@@ -121,7 +157,13 @@ function SignInForm() {
             )}
           />
 
-          <BtnPrimary customStyle={"!mt-auto"}>Sign In</BtnPrimary>
+          <BtnPrimary
+            type="submit"
+            disabled={isPending}
+            customStyle="[&_svg]:!size-5 !mt-auto"
+          >
+            {isPending ? <Spinner /> : "Sign In"}
+          </BtnPrimary>
         </form>
       </Form>
     </div>

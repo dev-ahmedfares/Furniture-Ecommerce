@@ -21,12 +21,30 @@ import { PasswordInput } from "../shared/PasswordInput";
 import { AiOutlineWarning } from "react-icons/ai";
 import Link from "next/link";
 import { Checkbox } from "../ui/checkbox";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { signUp } from "@/lib/actions";
+import { ISignUpProps } from "@/types";
+import { toast } from "sonner";
+import { Spinner } from "../shared/Spinner";
 
 const formSchema = z.object({
-  firstName: z.string().min(2).max(50),
-  listName: z.string().min(2).max(50),
-  email: z.string().min(2).max(50),
-  password: z.string().min(8),
+  firstName: z
+    .string()
+    .min(2, { message: "First name must be at least 2 character(s)" })
+    .max(50),
+  lastname: z
+    .string()
+    .min(2, { message: "List name must be at least 2 character(s)" })
+    .max(50),
+  email: z.string().email().min(2).max(50),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters" })
+    .regex(/^[A-Za-z0-9]+$/, {
+      message: "Password can only contain letters and numbers",
+    })
+    .regex(/[A-Za-z]/, { message: "Password must contain at least one letter" })
+    .regex(/[0-9]/, { message: "Password must contain at least one number" }),
   receiveOffers: z.boolean().default(false).optional(),
 });
 
@@ -35,22 +53,49 @@ function SignUpForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       firstName: "",
-      listName: "",
+      lastname: "",
       email: "",
       password: "",
       receiveOffers: false,
     },
   });
 
+  
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["signUp"],
+    mutationFn: (data: ISignUpProps) => signUp(data),
+    onSuccess: (data) => {
+      console.log(data);
+      if (data?.isSuccessful) {
+        form.reset();
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
+    },
+
+    onError: (error) => {
+      if (error?.message) {
+        toast.error(error?.message);
+      } else if (typeof error === "string") {
+        toast.error(error);
+      } else {
+        toast.error("Un expected error");
+      }
+    },
+  });
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     console.log(values);
+    const { receiveOffers, ...data } = values;
+    mutate({ data: { name: data.firstName, ...data }, userType: "personal" });
   }
   return (
     <div className="flex-1  flex !min-h-full flex-col background-light200_dark200 p-8 rounded-[23px]">
       <div className="text-center min-h-28">
-        <h3 className="font-bold text-2xl uppercase max-md:text-lg">I am new to This store</h3>
+        <h3 className="font-bold text-2xl uppercase max-md:text-lg">
+          I am new to This store
+        </h3>
         <p className="font-mont text-sm mt-2">
           Enjoy exclusive discounts & offers
         </p>
@@ -97,7 +142,7 @@ function SignUpForm() {
           />
           <FormField
             control={form.control}
-            name="listName"
+            name="lastname"
             render={({ field, formState: { errors } }) => (
               <FormItem>
                 <FormControl>
@@ -107,17 +152,17 @@ function SignUpForm() {
                     </div>
                     <div className="relative flex-1">
                       <FloatingInput
-                        id="listName"
+                        id="lastname"
                         {...field}
                         className={`${
-                          errors?.listName ? "!border-red-100" : ""
+                          errors?.lastname ? "!border-red-100" : ""
                         } rounded-none  text-darkBlack_light100 border-x-0 border-t-0 shadow-none !border-b-1 border-black dark:border-light-100   focus-visible:ring-0 `}
                       />
-                      <FloatingLabel htmlFor="listName">
-                        List Name
+                      <FloatingLabel htmlFor="lastname">
+                        Last Name
                         <span className="text-lg text-red-100">*</span>
                       </FloatingLabel>
-                      {errors?.listName && (
+                      {errors?.lastname && (
                         <span className="absolute  top-1/2 right-2 -translate-y-1/2 text-red-100">
                           <AiOutlineWarning size={20} />
                         </span>
@@ -229,7 +274,9 @@ function SignUpForm() {
               </FormItem>
             )}
           />
-          <BtnPrimary>Sign Up</BtnPrimary>
+          <BtnPrimary disabled={isPending} customStyle="[&_svg]:!size-5">
+            {isPending ? <Spinner  /> : "Sign Up"}
+          </BtnPrimary>
         </form>
       </Form>
 

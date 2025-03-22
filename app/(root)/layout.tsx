@@ -1,3 +1,4 @@
+import CustomToaster from "@/components/shared/CustomToaster";
 import Footer from "@/components/shared/Footer";
 import Navbar from "@/components/shared/Navbar";
 import React from "react";
@@ -8,6 +9,7 @@ function layout({ children }: { children: React.ReactNode }) {
       <Navbar />
       <section>{children}</section>
       <Footer />
+      <CustomToaster />
     </main>
   );
 }
