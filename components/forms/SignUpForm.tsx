@@ -22,10 +22,12 @@ import { AiOutlineWarning } from "react-icons/ai";
 import Link from "next/link";
 import { Checkbox } from "../ui/checkbox";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { signUp } from "@/lib/actions";
+import { signInWithGoogle, signUp } from "@/lib/actions";
 import { ISignUpProps } from "@/types";
 import { toast } from "sonner";
 import { Spinner } from "../shared/Spinner";
+import { FcGoogle } from "react-icons/fc";
+import { usePathname } from "next/navigation";
 
 const formSchema = z.object({
   firstName: z
@@ -49,6 +51,7 @@ const formSchema = z.object({
 });
 
 function SignUpForm() {
+  const pathname = usePathname()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -60,7 +63,6 @@ function SignUpForm() {
     },
   });
 
-  
   const { mutate, isPending } = useMutation({
     mutationKey: ["signUp"],
     mutationFn: (data: ISignUpProps) => signUp(data),
@@ -275,7 +277,7 @@ function SignUpForm() {
             )}
           />
           <BtnPrimary disabled={isPending} customStyle="[&_svg]:!size-5">
-            {isPending ? <Spinner  /> : "Sign Up"}
+            {isPending ? <Spinner /> : "Sign Up"}
           </BtnPrimary>
         </form>
       </Form>
@@ -286,7 +288,17 @@ function SignUpForm() {
             Or
           </span>
         </div>
-        <div>Google AuthO</div>
+        <form
+          className="flex items-center flex-col gap-4"
+          action={() => signInWithGoogle(pathname === "/sign-up&in" ? "/": "")}
+        >
+          <p className="capitalize font-mont text-darkBlack_light100">
+            Sign up with google
+          </p>
+          <Button className="[&_svg]:size-9 rounded-full w-14 h-14 bg-light-100 hover:bg-light-100">
+            <FcGoogle />
+          </Button>
+        </form>
       </div>
     </div>
   );

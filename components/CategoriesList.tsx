@@ -9,7 +9,7 @@ import Loading from "./feedback/Loading";
 
 function CategoriesList() {
   const { data, isPending, error, isError } = useQuery({
-    queryKey: ["categories"],
+    queryKey: ["categoriesList"],
     queryFn: getCategories,
   });
 
@@ -37,7 +37,7 @@ function CategoriesList() {
               />
             </div>
             <h4 className="font-extrabold text-xl mt-4">{offer.title}</h4>
-            <p className=" font-light leading-[185%] text-sm my-4">
+            <p title={offer.description} className="line-clamp-3 font-light leading-[185%] text-sm my-4">
               {offer.description}
             </p>
             <Link

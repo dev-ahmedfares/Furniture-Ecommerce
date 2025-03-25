@@ -2,9 +2,8 @@
 
 import axiosInstance from "@/app/api/axios";
 import { axiosErrorHandler } from "./utils";
-import { ISignInProps, ISignUpProps } from "@/types";
-
-
+import { ISignInProps, ISignOutProps, ISignUpProps } from "@/types";
+import { signIn as signInSocial, signOut as signOutSocial } from "./Auth";
 
 export async function signUp({ data, userType }: ISignUpProps) {
   try {
@@ -14,11 +13,10 @@ export async function signUp({ data, userType }: ISignUpProps) {
         "User-Type": userType,
       },
     });
-    
-    
-    return res.data
+
+    return res.data;
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return axiosErrorHandler(error);
   }
 }
@@ -31,28 +29,40 @@ export async function signIn({ data, userType }: ISignInProps) {
         "User-Type": userType,
       },
     });
-    
-    
-    return res.data
+
+    return res.data;
   } catch (error) {
-    console.log(error)
+    console.log(error);
+    return axiosErrorHandler(error);
+  }
+}
+export async function signOut({ accessToken, userType }: ISignOutProps) {
+  try {
+    const res = await axiosInstance.get("/api/out", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+        "User-Type": userType,
+      },
+    });
+
+    return res.data;
+  } catch (error) {
+    console.log(error);
     return axiosErrorHandler(error);
   }
 }
 
-export async function signWithSocial({ data, userType }: ISignInProps) {
-  try {
-    const res = await axiosInstance.post("api/user/social-login", data, {
-      headers: {
-        "Content-Type": "application/json",
-        "User-Type": userType,
-      },
-    });
+export async function signInWithGoogle(path?:string) {
+  
+  if (path) {
+    await signInSocial("google",  { redirectTo: path } );
     
+  } else {
+    await signInSocial("google");
     
-    return res.data
-  } catch (error) {
-    console.log(error)
-    return axiosErrorHandler(error);
   }
+}
+export async function signOutWithGoogle() {
+  await signOutSocial( { redirectTo: "/" });
 }

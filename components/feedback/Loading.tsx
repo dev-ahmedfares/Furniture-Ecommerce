@@ -1,10 +1,11 @@
-import { CategoriesSkeleton, CategoryAndProductsSkeleton, SingleProductSkeleton } from "./skeletons";
+import { CartItemsSkeleton, CategoriesSkeleton, CategoryAndProductsSkeleton, SingleProductSkeleton } from "./skeletons";
 
 
 const skeletonType = {
   categoriesSkeleton: CategoriesSkeleton,
   categoryAndProductsSkeleton:CategoryAndProductsSkeleton,
-  singleProductSkeleton:SingleProductSkeleton
+  singleProductSkeleton:SingleProductSkeleton,
+  cartItemsSkeleton:CartItemsSkeleton
 };
 
 type LoadingProps = {

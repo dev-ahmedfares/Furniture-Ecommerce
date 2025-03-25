@@ -6,9 +6,6 @@ import React from "react";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { CarouselItem } from "@/components/ui/carousel";
 import CustomCarousel from "@/components/CustomCarousle";
-import { getQueryClient } from "@/lib/get-query-client";
-import { getCategories } from "@/lib/data-service";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import CategoriesList from "@/components/CategoriesList";
 
 
@@ -34,14 +31,10 @@ const features = [
 
 async function Page() {
 
-  const queryClient = getQueryClient();
-  await queryClient.prefetchQuery({
-    queryKey: ["categories"],
-    queryFn: getCategories,
-  });
+ 
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
+    <>
       <section className="bg-bgHome bg-cover bg-no-repeat min-h-screen bg-center ">
         <div className="w-full min-h-screen flex flex-col items-center bg-lightOverlay dark:bg-blackOverlay ">
           <div className="text-center mt-52 text-light-100">
@@ -128,7 +121,7 @@ async function Page() {
                 enjoyable.
               </p>
               <Link
-                href={"/categories"}
+                href={"/"}
                 className="font-medium group capitalize text-primary-100 flex items-center gap-2 mt-auto"
               >
                 <span>more info</span>
@@ -231,7 +224,7 @@ async function Page() {
           className="absolute left-0 -bottom-32  xl:w-[200px] max-md:w-[120px] max-md:-bottom-20"
         />
       </section>
-    </HydrationBoundary>
+    </>
   );
 }
 

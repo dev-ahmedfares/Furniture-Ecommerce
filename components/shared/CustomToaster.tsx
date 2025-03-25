@@ -12,7 +12,7 @@ function CustomToaster() {
       toastOptions={{
         classNames: {
           toast: `${theme === "dark" ? "!text-light-100 !bg-dark-100 !border-dark-400" : "!text-light-400 !bg-light-100  "}`,
-          closeButton: `${theme === "dark" ? "!text-light-900 !bg-dark-300 !border-dark-400" : "!text-dark-100 !bg-light-900 "}`,
+          closeButton: `${theme === "dark" ? "!text-light-900 !bg-dark-100 !border-dark-400" : "!text-dark-100 !bg-light-100 "}`,
         },
       }}
     />

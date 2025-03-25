@@ -6,72 +6,20 @@ import React from "react";
 import { FiPlus } from "react-icons/fi";
 import Loading from "./feedback/Loading";
 import Link from "next/link";
+import { Button } from "./ui/button";
+import { ICartProduct, IProduct } from "@/types";
+import { useAppDispatch, useAppSelector } from "@/store/hook";
+import { addItemLocal } from "@/store/cart/cartSlice";
+import actAddItemToCart from "@/store/cart/act/actAddItemToCart";
+import { useAddToCartItem } from "@/hooks/useAddToCartItem";
+import ProductCard from "./ProductCard";
 
-const chairs = [
-  {
-    img: "/assets/images/chair-1.png",
-    category: "chair",
-    name: "Sakarias Armchair",
-    price: "392",
-    currency: "€",
-  },
-  {
-    img: "/assets/images/chair-1.png",
-    category: "chair",
-    name: "Sakarias Armchair",
-    price: "392",
-    currency: "€",
-  },
-  {
-    img: "/assets/images/chair-1.png",
-    category: "chair",
-    name: "Sakarias Armchair",
-    price: "392",
-    currency: "€",
-  },
-  {
-    img: "/assets/images/chair-1.png",
-    category: "chair",
-    name: "Sakarias Armchair",
-    price: "392",
-    currency: "€",
-  },
-  {
-    img: "/assets/images/chair-1.png",
-    category: "chair",
-    name: "Sakarias Armchair",
-    price: "392",
-    currency: "€",
-  },
-  {
-    img: "/assets/images/chair-1.png",
-    category: "chair",
-    name: "Sakarias Armchair",
-    price: "392",
-    currency: "€",
-  },
-  {
-    img: "/assets/images/chair-1.png",
-    category: "chair",
-    name: "Sakarias Armchair",
-    price: "392",
-    currency: "€",
-  },
-  {
-    img: "/assets/images/chair-1.png",
-    category: "chair",
-    name: "Sakarias Armchair",
-    price: "392",
-    currency: "€",
-  },
-];
-
+// TODO Types
 function ProductsList({ id }: { id: string }) {
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["categoryAndProducts", id],
     queryFn: () => getCategoryAndProductsById({ categoryId: id }),
   });
-  
 
   return (
     <Loading
@@ -112,45 +60,8 @@ function ProductsList({ id }: { id: string }) {
       </div>
 
       <div className="container py-24 grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-20 gap-y-32">
-        {data?.products?.data.map((item: any) => (
-          <div
-            key={item.id}
-            className="dark:shadow-dark-200 flex-col flex shadow-black-200 shadow rounded-[20px] bg-light-100 dark:bg-dark-100 "
-          >
-            <Link href={`/product/${item.id}`}>
-              <div className="background-light600_dark200 h-[160px] relative rounded-tl-[20px]  rounded-tr-[20px]">
-                <Image
-                  src={`http://test-ecomerce.xn--hrt-w-ova.de/${item.productimage[0].link}`}
-                  alt={item.name}
-                  width={180}
-                  height={160}
-                  className="object-contain mx-auto absolute left-1/2 -translate-x-1/2 bottom-0"
-                />
-              </div>
-            </Link>
-            <div className="p-4 flex flex-col flex-1">
-              <div>
-                <span className="font-inter text-light-700 capitalize">
-                  {item.title}
-                </span>
-                <h4
-                  title={item.description}
-                  className="font-inter capitalize font-semibold text-light800_light100 line-clamp-4 mb-4"
-                >
-                  {item.description}
-                </h4>
-              </div>
-              <div className="flex items-center justify-between mt-auto">
-                <div className="relative text-light800_light100 font-semibold ps-2">
-                  {item.price}
-                  <span className="absolute -top-1 -left-1 text-sm">€</span>
-                </div>
-                <div className="background-light800_light100 rounded-full w-7 h-7 flex items-center justify-center">
-                  <FiPlus className="text-light-100 dark:text-light-800" />
-                </div>
-              </div>
-            </div>
-          </div>
+        {data?.products?.data.map((item: IProduct) => (
+          <ProductCard key={item.id} item={item} />
         ))}
       </div>
     </Loading>

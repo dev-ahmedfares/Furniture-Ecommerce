@@ -7,6 +7,7 @@ import ToggleTheme from "./ToggleTheme";
 import SearchIcon from "../search/SearchIcon";
 import MenubarContainer from "./MenubarContainer";
 import SearchContainer from "../search/SearchContainer";
+import { DropdownMenuPopUp } from "../DropdownMenuPopUp";
 
 function Navbar() {
   return (
@@ -24,6 +25,7 @@ function Navbar() {
         <div className="flex items-center gap-6 max-md:hidden">
           <ToggleTheme />
           <Language />
+          <DropdownMenuPopUp/>
         </div>
 
         <div>

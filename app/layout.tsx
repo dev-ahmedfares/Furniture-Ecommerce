@@ -12,6 +12,9 @@ import "./globals.css";
 import localFont from "next/font/local";
 import { ThemeProvider } from "@/components/shared/ThemeProvider";
 import QueryProvider from "@/components/QueryProvider";
+import ReduxProvider from "@/components/ReduxProvider";
+import { SessionProvider } from "next-auth/react";
+import AuthContext from "@/context/AuthContext";
 
 const mont = Montserrat({
   weight: ["300", "400", "500", "600", "700", "800"],
@@ -93,7 +96,13 @@ export default function RootLayout({
         className={`${rubik.variable} ${inter.variable} ${dmSans.variable} ${mont.variable} ${gilroy.variable} ${agency.variable}`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            <SessionProvider>
+              <ReduxProvider>
+                <AuthContext>{children}</AuthContext>
+              </ReduxProvider>
+            </SessionProvider>
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>

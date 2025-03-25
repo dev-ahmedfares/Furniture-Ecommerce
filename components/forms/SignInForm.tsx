@@ -5,41 +5,38 @@ import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { z } from "zod";
-import { Button } from "../ui/button";
 import { FloatingInput, FloatingLabel } from "../ui/floating-label-input";
 import { FaAt } from "react-icons/fa6";
 import { MdOutlineLock } from "react-icons/md";
 import BtnPrimary from "../shared/BtnPrimary";
 import { PasswordInput } from "../shared/PasswordInput";
 import { AiOutlineWarning } from "react-icons/ai";
-import Link from "next/link";
-import { Checkbox } from "../ui/checkbox";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { signIn } from "@/lib/actions";
 import { ISignInProps } from "@/types";
 import { Spinner } from "../shared/Spinner";
-import {  useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useAppDispatch } from "@/store/hook";
+import { storeUser } from "@/store/auth/authSlice";
+import { signIn } from "@/lib/actions";
 
 const formSchema = z.object({
   email: z
     .string()
     .min(1, { message: "Email is required" })
     .email({ message: "Invalid email format" }),
-  password: z
-    .string()
-    .min(1, { message: "Password is required" })
+  password: z.string().min(1, { message: "Password is required" }),
 });
 
 function SignInForm() {
-  const router = useRouter()
+  const pathname = usePathname()
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -55,8 +52,12 @@ function SignInForm() {
       console.log(data);
       if (data?.isSuccessful) {
         form.reset();
+        dispatch(storeUser({ user: data.data, accessToken: data.data.token }));
         toast.success("Successfully logged in");
-        router.push("/");
+        
+        if (pathname === "/sign-up&in") {
+          router.push("/");
+        }
       } else {
         toast.error(data);
       }
@@ -74,9 +75,10 @@ function SignInForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
     mutate({ data: values, userType: "personal" });
   }
+
+  
   return (
     <div className="flex-1 flex flex-col  background-light200_dark200 p-8 rounded-[23px] min-h-[400px]">
       <div className="text-center min-h-28">
