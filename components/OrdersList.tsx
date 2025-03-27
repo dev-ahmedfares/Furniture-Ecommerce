@@ -25,7 +25,7 @@ function OrdersList() {
       </p>
       <div className="flex justify-center mt-16 relative">
         <div className="min-w-fit relative">
-          <div className="relative">
+          <div className="relative overflow-hidden">
             {items.length > 0 && (
               <div className="mb-8">
                 <button
