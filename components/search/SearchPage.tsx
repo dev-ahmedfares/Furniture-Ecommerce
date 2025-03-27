@@ -1,8 +1,10 @@
 import React from "react";
 import SearchInput from "./SearchForm";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 function SearchPage() {
+  const t = useTranslations("homePage.searchPopup")
   return (
     <div className="mt-16">
       <div className="flex justify-center  gap-10">
@@ -19,10 +21,10 @@ function SearchPage() {
         </div>
         <div className=" text-darkBlack_light100 text-center mx-12 max-xl:mx-6 relative">
           <h1 className="h1-bold text-darkBlack_light100 mx-auto max-w-[400px] max-sm:text-[25px]">
-            Chic Furnishings Online Furniture Store
+            {t("h")}
           </h1>
           <p className="font-medium mt-2 text-light500_light100  leading-[130%]">
-            Discover Elegant Comfort for Every Room
+          {t("p")}
           </p>
 
           <Image
@@ -47,7 +49,7 @@ function SearchPage() {
       </div>
 
       <div className="lg:mt-28 mt-16 sm:mt-20 max-w-2xl mx-auto">
-        <SearchInput />
+        <SearchInput label={t("search")}/>
       </div>
 
       <div className=" justify-center mt-16 md:mt-28 flex lg:!hidden">

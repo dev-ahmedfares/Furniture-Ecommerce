@@ -8,10 +8,8 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -21,7 +19,7 @@ const formSchema = z.object({
   search: z.string(),
 });
 
-function SearchForm() {
+function SearchForm({label}:{label?:string}) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -29,10 +27,9 @@ function SearchForm() {
     },
   });
 
-  // 2. Define a submit handler.
+  
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+  
     console.log(values);
   }
 
@@ -48,7 +45,7 @@ function SearchForm() {
                 <div className="flex items-center relative">
                   <Input
                     className="background-dark400_light850 min-h-[50px] rounded-full border-primary-100 border text-darkBlack_light100 focus-visible:ring-0 px-6 font-mont"
-                    placeholder="Search"
+                    placeholder={label}
                     {...field}
                   />
                   <Button
@@ -56,7 +53,7 @@ function SearchForm() {
                     variant={"ghost"}
                     type="submit"
                   >
-                    <SearchIcon />
+                    <SearchIcon isPopup={true}/>
                   </Button>
                 </div>
               </FormControl>

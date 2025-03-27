@@ -1,73 +1,43 @@
 "use client";
 
 import * as React from "react";
-import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAppDispatch, useAppSelector } from "@/store/hook";
-import Link from "next/link";
-import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { toast } from "sonner";
+
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { PiSignOut } from "react-icons/pi";
-import { signOut, signOutWithGoogle } from "@/lib/actions";
-import { signOutClean, storeUser } from "@/store/auth/authSlice";
-import { useSession } from "next-auth/react";
-import { useCustomAuth } from "@/context/AuthContext";
+import { signOutWithGoogle } from "@/lib/actions";
+import { usePathname } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { useSignInAndOut } from "@/hooks/useSignInAndOut";
 
-type Checked = DropdownMenuCheckboxItemProps["checked"];
 
 export function DropdownMenuPopUp() {
-  const {
-    accessToken,
-    isAuthenticatedWithGoogle,
-    user,
-  } = useCustomAuth();
-  const dispatch = useAppDispatch();
+  const t = useTranslations("homePage.navLinks")
+  const pathname = usePathname();
+  const locale = useLocale();
+  const isHomeSection = pathname === `/${locale}`;
 
-  const { mutate, isPending } = useMutation({
-    mutationKey: ["signOut"],
-    mutationFn: () => signOut({ accessToken, userType: "personal" }),
-    onSuccess: (data) => {
-      console;
-      if (data?.isSuccessful) {
-        dispatch(signOutClean());
-        toast.success("Successfully logged out");
-      } else {
-        toast.error(data);
-      }
-    },
-
-    onError: (error) => {
-      if (error?.message) {
-        toast.error(error?.message);
-      } else if (typeof error === "string") {
-        toast.error(error);
-      } else {
-        toast.error("Un expected error");
-      }
-    },
-  });
+const {mutate,isPending,isAuthenticatedWithGoogle,user,accessToken} = useSignInAndOut()
 
   if (!accessToken)
     return (
       <Link href={"/sign-up&in"}>
         <Button
-          className="!text-light-400 dark:!text-light-100  bg-light-100 dark:bg-dark-100"
+          className={`text-light-400 dark:!text-light-100  bg-light-100 dark:bg-dark-100 ${
+            isHomeSection ? "md:!bg-light-100 md:dark:!text-light-400" : ""
+          }`}
           variant="outline"
         >
-          Sign In
+          {t("signin")}
         </Button>
       </Link>
     );
@@ -76,7 +46,9 @@ export function DropdownMenuPopUp() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          className="!text-light-400 capitalize gap-.5 dark:!text-light-100 p-2 !py-0 h-8 "
+          className={`text-light-400 capitalize gap-.5 dark:text-light-100 p-2 !py-0 h-8 ${
+            isHomeSection ? " md:!text-light-100 hover:bg-transparent" : ""
+          }`}
           variant="ghost"
         >
           {`${user?.name} ${user?.lastname}`}
@@ -88,12 +60,11 @@ export function DropdownMenuPopUp() {
           <DropdownMenuItem
             disabled={isPending}
             onClick={() => {
-              
               signOutWithGoogle();
             }}
             className="cursor-pointer"
           >
-            Log out
+            {t("logout")}
             <DropdownMenuShortcut>
               <PiSignOut />
             </DropdownMenuShortcut>
@@ -104,7 +75,7 @@ export function DropdownMenuPopUp() {
             onClick={() => mutate()}
             className="cursor-pointer"
           >
-            Log out
+            {t("logout")}
             <DropdownMenuShortcut>
               <PiSignOut />
             </DropdownMenuShortcut>

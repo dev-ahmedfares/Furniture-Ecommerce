@@ -4,12 +4,8 @@ import type React from "react";
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-
 import { CheckIcon, ChevronRightIcon, ChevronLeftIcon } from "lucide-react";
-
 import SignInForm from "./forms/SignInForm";
 import SignUpForm from "./forms/SignUpForm";
 import SignTabs from "./SignTabs";
@@ -29,22 +25,39 @@ import { FloatingInput, FloatingLabel } from "./ui/floating-label-input";
 import { AiOutlineWarning } from "react-icons/ai";
 import Image from "next/image";
 import OrderCard from "./OrderCard";
-import { redirect } from "next/navigation";
-import { actGetOrderPrice } from "@/store/cart/cartSlice";
+import { useRouter } from "next/navigation";
+import { actCreateOrder, actGetOrderPrice } from "@/store/cart/cartSlice";
+import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
-const formSchema = z.object({
-  city: z.string().min(1, { message: "City is required" }),
-  street_name: z.string().min(1, { message: "Street Name is required" }),
-  building_number: z.string().min(1, { message: "City is required" }),
-  payment_method: z.string().min(1, { message: "Payment method is required" }),
-});
-type stepKey = 0 | 1 | 2 | 3 | 4 | 5;
+
+
+type stepKey = 0 | 1 | 2 | 3;
+
 export default function FormStepper() {
+  const t = useTranslations("placeOrder");
+  const router = useRouter();
   const { accessToken, user } = useAppSelector((state) => state.auth);
   const [currentStep, setCurrentStep] = useState<stepKey>(1);
   const { items, totalPriceFromApi } = useAppSelector((state) => state.cart);
 
-  if (items.length === 0) redirect("/");
+
+  const formSchema = z.object({
+    city: z.string().min(1, { message: t("form1.cityValid") }),
+    street_name: z.string().min(1, { message: t("form1.streetNameValid") }),
+    building_number: z
+      .string()
+      .min(1, { message: t("form1.buildingNumValid") }),
+    payment_method: z.string().min(1, { message: t("form2.paymentValid") }),
+  });
+
+  type FormSchema = z.infer<typeof formSchema>;
+  type FieldName = keyof FormSchema;
+  
+ 
+
+
+  if (items.length === 0) router.push("/");
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -82,22 +95,22 @@ export default function FormStepper() {
   const steps = [
     {
       id: "step-1",
-      name: "Register",
+      name: t("register"),
       //   fields: ["firstName", "lastName", "email"],
     },
     {
       id: "step-2",
-      name: "Data",
+      name: t("data"),
       fields: ["username", "password"],
     },
     {
       id: "step-3",
-      name: "payment",
+      name: t("payment"),
       fields: ["theme", "notifications"],
     },
     {
       id: "step-4",
-      name: "review",
+      name: t("review"),
       fields: ["bio", "interests"],
     },
   ];
@@ -107,19 +120,24 @@ export default function FormStepper() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       city: "",
-      //   password: "",
+      street_name: "",
+      building_number: "",
+      payment_method: "",
     },
     mode: "onChange",
   });
 
   const validateStep: (step: 1 | 2 | 3) => Promise<boolean> = async (step) => {
-    const stepFields: Record<1 | 2 | 3, string[]> = {
+    const stepFields: Record<1 | 2 | 3, FieldName[]> = {
       1: ["city", "street_name", "building_number"],
       2: ["payment_method"],
-      3: ["review"],
+      3: [],
     };
 
     const fieldsToValidate = stepFields[step];
+    if (fieldsToValidate.length === 0) {
+      return true; // Skip validation for review step
+    }
     const isValid = await form.trigger(fieldsToValidate);
     if (isValid) {
       setCurrentValues((prev: any) => ({
@@ -130,88 +148,104 @@ export default function FormStepper() {
     return isValid;
   };
 
-  // To Dynamically Validate Fields
-  //   const title_ar = form.watch("city");
-
   const [complete, setComplete] = useState(false);
   const handleNext = async () => {
-    // setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
+    if (currentStep === 0) {
+      // Step 0 doesn’t require validation; move to next step if authenticated
+      if (accessToken) {
+        setCurrentStep(1);
+      }
+      return;
+    }
+
     const isValid = await validateStep(currentStep);
     if (isValid) {
-      if (currentStep === steps.length) {
+      if (currentStep === steps.length - 1) {
         setComplete(true);
       } else {
-        setCurrentStep((prev) => prev + 1);
+        setCurrentStep((prev) => (prev + 1) as stepKey);
       }
     }
   };
 
   const handlePrevious = () => {
-    setCurrentStep((prev) => Math.max(prev - 1, 0));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Submit the form data
-    console.log("Form submitted:", formData);
-    // You would typically send this data to your backend here
-    alert("Form submitted successfully!");
+    setCurrentStep((prev) => Math.max(prev - 1, 0) as stepKey);
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // mutate({ data: values, userType: "personal" });
+    const formData = new FormData();
+    formData.append("shipping_street_address", values.street_name);
+    formData.append("shipping_state", values.building_number);
+    formData.append("shipping_country", values.city);
+    formData.append("payment_method", values.payment_method);
+    dispatch(actCreateOrder(formData))
+      .unwrap()
+      .then((res: any) => {
+        router.replace(res);
+      })
+      .catch((error) => {
+        toast.error(error);
+      });
   }
 
   return (
-    <div className="w-full max-w-5xl mx-auto py-8 px-4 ">
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-4">
+    <div className="w-full max-w-5xl mx-auto py-8 px-4 relative z-[1]">
+      <div className="xs:mb-8">
+        <div className="flex items-center justify-between mb-4 relative">
           {steps.map((step, index) => (
-            <div key={step.id} className="flex flex-col items-center">
+            <div
+              key={step.id}
+              className={`flex items-center gap-2 relative z-20  rounded-full xs:p-1 font-mont uppercase ${
+                index < currentStep
+                  ? "bg-green-200"
+                  : "bg-light-100 dark:bg-dark-100"
+              }`}
+            >
               <div
-                className={`flex items-center justify-center w-10 h-10 rounded-full border-2 ${
+                className={`flex items-center justify-center w-6 h-6 rounded-full border-2 ${
                   index < currentStep
-                    ? "bg-primary border-primary text-primary-foreground"
+                    ? "bg-green-100 border-green-100  text-light-100"
                     : index === currentStep
-                    ? "border-primary text-primary"
-                    : "border-muted text-muted-foreground"
+                    ? "border-blue-100 bg-light-100 dark:bg-dark-100 "
+                    : "border-blue-100 bg-light-100 dark:bg-dark-100"
                 }`}
               >
                 {index < currentStep ? (
                   <CheckIcon className="w-5 h-5" />
                 ) : (
-                  <span>{index + 1}</span>
+                  <>
+                    <span className="xs:hidden">{index + 1}</span>
+                  </>
                 )}
               </div>
               <span
-                className={`text-xs mt-2 font-medium ${
-                  index <= currentStep
-                    ? "text-primary"
-                    : "text-muted-foreground"
+                className={`text-xs max-xs:hidden  font-medium ${
+                  index < currentStep
+                    ? "!text-black"
+                    : "text-darkBlack_light100"
                 }`}
               >
                 {step.name}
               </span>
             </div>
           ))}
-        </div>
-        <div className="relative w-full h-1 bg-muted rounded-full">
-          <div
-            className="absolute top-0 left-0 h-1 bg-primary rounded-full transition-all duration-300"
-            style={{ width: `${(currentStep / (steps.length - 1)) * 100}%` }}
-          ></div>
+
+          <div className="absolute w-full h-[2px] bg-muted rounded-full">
+            <div
+              className="absolute top-0  left-0 h-[2px] bg-green-200 rounded-full transition-all duration-300"
+              style={{ width: `${(currentStep / (steps.length - 1)) * 100}%` }}
+            ></div>
+          </div>
         </div>
       </div>
-
+      <div className="relative w-full mb-2 xs:mb-6 h-[1px] dark:bg-light-100/20 bg-dark-100/20 rounded-full"></div>
       <div className="w-full">
         {currentStep === 0 && (
           <>
             <div className="text-center">
-              <h1 className="h1-bold text-darkBlack_light100">
-                Welcome to Our store
-              </h1>
+              <h1 className="h1-bold text-darkBlack_light100">{t("h11")}</h1>
               <p className="font-medium leading-[160%] text-light500_light100">
-                Bringing Your Style Home
+                {t("p11")}
               </p>
             </div>
 
@@ -236,17 +270,17 @@ export default function FormStepper() {
             {currentStep !== 0 && (
               <div className="text-center">
                 <h1 className="h1-bold text-darkBlack_light100 max-md:text-[20px] max-md:mb-2">
-                  Your customer data for the order
+                  {t("h1")}
                 </h1>
                 <p className="font-medium leading-[160%] text-light500_light100">
-                  Bringing Your Style Home
+                  {t("p")}
                 </p>
               </div>
             )}
             {currentStep === 1 && (
               <>
                 <h4 className="font-mont font-semibold text-start mt-8 md:mt-12 uppercase">
-                  Delivery address
+                  {t("form1.h2")}
                 </h4>
                 <FormField
                   control={form.control}
@@ -264,7 +298,7 @@ export default function FormStepper() {
                               } rounded-none  text-darkBlack_light100 border-x-0 border-t-0 shadow-none !border-b-1 border-black dark:border-light-100   focus-visible:ring-0 `}
                             />
                             <FloatingLabel htmlFor="city-signin">
-                              City
+                              {t("form1.city")}
                               <span className="text-lg text-red-100">*</span>
                             </FloatingLabel>
                             {errors?.city && (
@@ -296,7 +330,7 @@ export default function FormStepper() {
                               } rounded-none  text-darkBlack_light100 border-x-0 border-t-0 shadow-none !border-b-1 border-black dark:border-light-100   focus-visible:ring-0 `}
                             />
                             <FloatingLabel htmlFor="street_name-signin">
-                              Street Name
+                              {t("form1.streetName")}
                               <span className="text-lg text-red-100">*</span>
                             </FloatingLabel>
                             {errors?.street_name && (
@@ -329,7 +363,7 @@ export default function FormStepper() {
                               } rounded-none no-spinner text-darkBlack_light100 border-x-0 border-t-0 shadow-none !border-b-1 border-black dark:border-light-100   focus-visible:ring-0 `}
                             />
                             <FloatingLabel htmlFor="building_number-signin">
-                              Building Number
+                              {t("form1.buildingNum")}
                               <span className="text-lg text-red-100">*</span>
                             </FloatingLabel>
                             {errors?.building_number && (
@@ -351,7 +385,7 @@ export default function FormStepper() {
             {currentStep === 2 && (
               <>
                 <h4 className="font-mont font-semibold text-start mt-8 md:mt-12 uppercase">
-                  Payment method
+                  {t("form2.h2")}
                 </h4>
                 <FormField
                   control={form.control}
@@ -373,7 +407,7 @@ export default function FormStepper() {
                                 />
                               </FormControl>
                               <FormLabel className="font-normal font-mont">
-                                Card Payment
+                                {t("form2.card")}
                               </FormLabel>
                             </div>
                             <div className="flex items-center gap-2">
@@ -400,7 +434,7 @@ export default function FormStepper() {
                                 />
                               </FormControl>
                               <FormLabel className="font-normal font-mont">
-                                Paypal
+                                {t("form2.paypal")}
                               </FormLabel>
                             </div>
                             <div>
@@ -424,15 +458,15 @@ export default function FormStepper() {
             {currentStep === 3 && (
               <>
                 <h4 className="font-mont font-semibold text-darkBlack_light100 text-start mt-2 md:mt-12 uppercase">
-                  Review order
+                  {t("form3.h2")}
                 </h4>
                 <p className="font-mont text-sm text-dark-600 !mt-2 dark:text-light-100">
-                  Dear customer, please check your information for accuracy.
+                  {t("form3.p")}
                 </p>
                 <div className="flex max-lg:flex-col-reverse gap-10">
                   <div className="flex-1">
                     <h4 className="md:text-xl  text-darkBlack_light100 font-mont font-semibold mb-8 uppercase">
-                      your shopping cart ({items.length})
+                      {t("form3.yourShopping")} ({items.length})
                     </h4>
                     <div className="!background-light650_dark200 rounded-[23px] pe-1 overflow-hidden">
                       <div className=" relative flex flex-col  !pt-4  gap-10 pb-20 max-h-[500px] px-4 overflow-y-auto  ">
@@ -442,7 +476,7 @@ export default function FormStepper() {
                               key={`${order?.item_id}  ${idx}`}
                               order={order}
                               withOutBtns={true}
-                              customStyle="min-w-[200px]"
+                              customStyle="!min-w-[200px] justify-between"
                             />
                           ))
                         ) : (
@@ -457,7 +491,7 @@ export default function FormStepper() {
                     <div className="flex max-sm:flex-col sm:items-start   gap-6">
                       <div className="flex-1">
                         <h4 className="md:text-xl font-mont font-semibold mb-8 uppercase">
-                          Delivery address
+                        {t("form3.address")}
                         </h4>
                         <div className="rounded-[23px] background-light650_dark200">
                           <ul className="flex flex-col gap-1 p-4">
@@ -472,7 +506,7 @@ export default function FormStepper() {
                       </div>
                       <div className="flex-1 flex flex-col">
                         <h4 className="md:text-xl font-mont font-semibold mb-8 uppercase">
-                          payment
+                          {t("form3.payment")}
                         </h4>
                         <div className="rounded-[23px] flex-1 background-light650_dark200">
                           <ul className="flex flex-col gap-3 p-4">
@@ -506,7 +540,7 @@ export default function FormStepper() {
                     <div className=" border-t pt-8 mt-8 max-lg:hidden">
                       <div className="flex items-center justify-between">
                         <p className="font-semibold text-darkBlack_light100">
-                          Total
+                          {t("form3.total")}
                         </p>
                         <p className="font-semibold font-mont text-darkBlack_light100">
                           € {totalPriceFromApi}
@@ -518,7 +552,7 @@ export default function FormStepper() {
                 <div className=" border-t pt-8 mt-8 lg:hidden">
                   <div className="flex items-center justify-between">
                     <p className="font-semibold text-darkBlack_light100">
-                      Total
+                      {t("form3.total")}
                     </p>
                     <p className="font-semibold font-mont text-darkBlack_light100">
                       € {totalPriceFromApi}
@@ -532,24 +566,31 @@ export default function FormStepper() {
         {currentStep > 0 && (
           <div className="flex justify-between mt-8">
             <Button
+              type="button"
               variant="outline"
               onClick={handlePrevious}
               disabled={currentStep === 1}
             >
-              <ChevronLeftIcon className="mr-2 h-4 w-4" />
-              Previous
+              <ChevronLeftIcon className="mr-2 h-4 w-4 rtl:rotate-180" />
+              {t("prev")}
             </Button>
-            {currentStep < steps.length - 1 ? (
+            {currentStep < steps.length - 1 && (
               <Button
-                className="bg-primary-100 hover:bg-primary-100/90 text-light-100"
+                type="button"
+                className="bg-primary-100   hover:bg-primary-100/90 text-light-100"
                 onClick={handleNext}
               >
-                Next
-                <ChevronRightIcon className="ml-2 h-4 w-4" />
+                <span> {t("next")}</span>
+                <ChevronRightIcon className="ml-2 h-4 w-4 rtl:rotate-180" />
               </Button>
-            ) : (
-              <Button className="bg-primary-100 hover:bg-primary-100/90 text-light-100" type="submit" form="stepForm">
-                Submit
+            )}
+            {currentStep === steps.length - 1 && (
+              <Button
+                className="bg-primary-100 hover:bg-primary-100/90 text-light-100"
+                type="submit"
+                form="stepForm"
+              >
+                {t("form3.submit")}
               </Button>
             )}
           </div>

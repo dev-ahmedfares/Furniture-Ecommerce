@@ -2,22 +2,26 @@
 
 import React from "react";
 import OrderCard from "./OrderCard";
-import Loading from "./feedback/Loading";
 import { useAppSelector } from "@/store/hook";
 import BtnPrimary from "./shared/BtnPrimary";
 import { useRemoveItemAndDestroyCart } from "@/hooks/useRemoveItemAndDestroyCart";
-import Link from "next/link";
+
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 function OrdersList() {
+  const t = useTranslations("cartPage")
   const { items, total } = useAppSelector((state) => state.cart);
   const { handleDestroyCart, loadingDestroyCart } =
     useRemoveItemAndDestroyCart();
   const totalItemsQty =
     items?.length > 0 ? items.reduce((acc, ele) => acc + ele.qty, 0) : 0;
-  return (
+  
+    
+    return (
     <>
       <p className="font-semibold text-center  text-light500_light100 mt-12 leading-[130%] text-sm">
-        Items (<span>{totalItemsQty}</span>)
+        {t("items")} (<span>{totalItemsQty}</span>)
       </p>
       <div className="flex justify-center mt-16 relative">
         <div className="min-w-fit relative">
@@ -29,7 +33,7 @@ function OrdersList() {
                   onClick={() => handleDestroyCart()}
                   className="font-semibold text-sm"
                 >
-                  Clear Cart
+                  {t("clearCart")}
                 </button>
               </div>
             )}
@@ -40,7 +44,7 @@ function OrdersList() {
                 ))
               ) : (
                 <div className="min-w-[280px] text-center text-xl">
-                  Cart is empty
+                  {t("cartEmpty")}
                 </div>
               )}
             </div>
@@ -49,14 +53,14 @@ function OrdersList() {
           {items?.length > 0 && (
             <div className=" border-t pt-8">
               <div className="flex items-center justify-between">
-                <p className="font-semibold text-darkBlack_light100">Total</p>
+                <p className="font-semibold text-darkBlack_light100">{t("total")}</p>
                 <p className="font-semibold font-mont text-darkBlack_light100">
                   € {total}
                 </p>
               </div>
               <Link href={"/place-order"}>
                 <BtnPrimary customStyle="rounded-full w-full mt-8">
-                  Place Order
+                {t("placeOrder")}
                 </BtnPrimary>
               </Link>
             </div>

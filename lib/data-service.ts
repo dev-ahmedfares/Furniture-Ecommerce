@@ -1,12 +1,12 @@
-import axios from "axios";
+import { IProduct } from "@/types";
 import { axiosErrorHandler } from "./utils";
 import axiosInstance from "@/app/api/axios";
 
-export async function getCategories() {
+export async function getCategories(locale: string) {
   try {
     const categories = await axiosInstance.get("/api/category/get", {
       headers: {
-        "Accept-Language": "en_US",
+        "Accept-Language": `${locale}`,
       },
     });
 
@@ -22,7 +22,7 @@ export async function getAllProducts() {
         "Accept-Language": "en_US",
       },
     });
-    console.log(res.data.data)
+   
     return res.data.data;
   } catch (error) {
     return axiosErrorHandler(error);
@@ -31,40 +31,48 @@ export async function getAllProducts() {
 
 export async function getCategoryAndProductsById({
   categoryId,
+  locale,
 }: {
   categoryId: string;
+  locale: string;
 }) {
   try {
     const [categoryResponse, productsResponse] = await Promise.all([
       axiosInstance.get(`/api/category/find/${categoryId}`, {
         headers: {
-          "Accept-Language": "en_US",
+          "Accept-Language": `${locale}`,
         },
       }),
       axiosInstance.get(`/api/product/category?category_id=${categoryId}`, {
         headers: {
-          "Accept-Language": "en_US",
+          "Accept-Language": `${locale}`,
         },
       }),
     ]);
-    console.log(categoryResponse, productsResponse);
+   
     return {
       category: categoryResponse.data.data,
-      products: productsResponse.data,
+      products: productsResponse.data as IProduct,
     };
   } catch (error) {
     return axiosErrorHandler(error);
   }
 }
 
-export async function getProductById({ productId }: { productId: string }) {
+export async function getProductById({
+  productId,
+  locale,
+}: {
+  productId: string;
+  locale: string;
+}) {
   try {
     const product = await axiosInstance.get(`/api/product/find/${productId}`, {
       headers: {
-        "Accept-Language": "en_US",
+        "Accept-Language": locale,
       },
     });
-    console.log(product);
+   
     return product.data.data;
   } catch (error) {
     return axiosErrorHandler(error);

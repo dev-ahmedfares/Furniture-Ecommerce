@@ -88,7 +88,7 @@ const authConfig: NextAuthConfig = {
             },
           }
         );
-        console.log(response, user, "Eeeeeeee");
+       
 
         
         return true; 

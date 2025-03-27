@@ -1,13 +1,15 @@
 "use client";
 import { IProduct } from "@/types";
 import Image from "next/image";
-import Link from "next/link";
-import React from "react";
+
+import React, { useState } from "react";
 import { Button } from "./ui/button";
 import { FiPlus } from "react-icons/fi";
 import { useAddToCartItem } from "@/hooks/useAddToCartItem";
+import { Link } from "@/i18n/navigation";
 
 function ProductCard({ item }: { item: IProduct }) {
+  const [isClicked, setIsClicked] = useState(false);
   const { handleAddToCart, loadingCart, cartItems } = useAddToCartItem();
   const currentItem = cartItems.find(
     (cardItem) => cardItem.item_id === item.id
@@ -43,21 +45,21 @@ function ProductCard({ item }: { item: IProduct }) {
         </div>
         <div className="flex items-center justify-between mt-auto">
           <div className="relative text-light800_light100 font-semibold ps-2">
-            {item.price}
-            <span className="absolute -top-1 -left-1 text-sm">€</span>
+            {Math.round(+item.price)}
+            <span className="absolute -top-1 -left-1 rtl:-left-2 text-sm">€</span>
           </div>
           <Button
-            disabled={ cannotAddToCart || +item.quantity === 0}
-            onClick={() =>
+            disabled={cannotAddToCart || +item.quantity === 0}
+            onClick={() => {
+              setIsClicked(!isClicked);
               handleAddToCart({
                 item_id: item.id,
                 price: +item.discount > 0 ? +item.discount_Price : +item.price,
                 qty: 1,
                 name: item?.title,
-                
-              })
-            }
-            className="!background-light800_light100 rounded-full w-7 p-0 h-7 flex items-center justify-center "
+              });
+            }}
+            className={`!background-light800_light100 target:scale-50 rounded-full w-7 p-0 h-7 flex items-center justify-center transition-transform duration-200  active:scale-90 `}
           >
             <FiPlus className="text-light-100 dark:text-light-800" />
           </Button>

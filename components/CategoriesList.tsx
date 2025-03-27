@@ -2,18 +2,21 @@
 import { getCategories } from "@/lib/data-service";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import Link from "next/link";
-import React, { Suspense } from "react";
+
+import React from "react";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import Loading from "./feedback/Loading";
+import { useLocale, useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 function CategoriesList() {
+  const locale = useLocale()
   const { data, isPending, error, isError } = useQuery({
-    queryKey: ["categoriesList"],
-    queryFn: getCategories,
+    queryKey: ["categoriesList",locale],
+    queryFn:()=> getCategories(locale),
   });
 
-
+const t = useTranslations("homePage")
   return (
     <Loading
       status={isPending}
@@ -44,8 +47,8 @@ function CategoriesList() {
               href={`/category/${offer.id}`}
               className="font-medium group capitalize text-primary-100 flex items-center gap-2 mt-auto"
             >
-              <span>more info</span>
-              <span className="group-hover:animate-pulse">
+              <span>{t("outCategories.moreInfo")}</span>
+              <span className="group-hover:animate-pulse rtl:-rotate-180">
                 <IoIosArrowRoundForward size={20} />
               </span>
             </Link>

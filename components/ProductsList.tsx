@@ -1,24 +1,21 @@
+// @ts-nocheck
 "use client";
 import { getCategoryAndProductsById } from "@/lib/data-service";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import React from "react";
-import { FiPlus } from "react-icons/fi";
 import Loading from "./feedback/Loading";
-import Link from "next/link";
-import { Button } from "./ui/button";
-import { ICartProduct, IProduct } from "@/types";
-import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { addItemLocal } from "@/store/cart/cartSlice";
-import actAddItemToCart from "@/store/cart/act/actAddItemToCart";
-import { useAddToCartItem } from "@/hooks/useAddToCartItem";
+import { ICategory, IProduct } from "@/types";
 import ProductCard from "./ProductCard";
+import { useLocale } from "next-intl";
 
-// TODO Types
+
+
 function ProductsList({ id }: { id: string }) {
+  const locale = useLocale();
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["categoryAndProducts", id],
-    queryFn: () => getCategoryAndProductsById({ categoryId: id }),
+    queryKey: ["categoryAndProducts", id, locale],
+    queryFn: () => getCategoryAndProductsById({ categoryId: id, locale }),
   });
 
   return (

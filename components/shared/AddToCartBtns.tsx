@@ -31,7 +31,7 @@ function AddToCartBtns({
         disabled={cannotAddToCart || loadingCart || +currentQty === 0}
         onClick={() => handleIncreaseItem(item)}
         size={"icon"}
-        className={`disabled:opacity-100 disabled:!bg-light-750 rounded-full bg-light-750 dark:!bg-light-750 ${btnStyle}`}
+        className={`transition-transform duration-200  active:scale-90 disabled:opacity-100 disabled:!bg-light-750 rounded-full bg-light-750 dark:!bg-light-750 ${btnStyle}`}
       >
         <FiPlus className="text-light-100" />
       </Button>
@@ -44,7 +44,7 @@ function AddToCartBtns({
         disabled={ loadingDecrease ||  +currentQty === 0 || +currentQty === 1}
         onClick={() => handleDecreaseItem(item)}
         size={"icon"}
-        className={` rounded-full bg-light-750 disabled:opacity-100 disabled:!bg-light-750 dark:!bg-light-750 ${btnStyle}`}
+        className={`transition-transform duration-200  active:scale-90 rounded-full bg-light-750 disabled:opacity-100 disabled:!bg-light-750 dark:!bg-light-750 ${btnStyle}`}
       >
         <FiMinus className="text-light-100" />
       </Button>

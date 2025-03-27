@@ -62,3 +62,10 @@ export interface IProduct {
   status: number;
   productimage: { id: number; product_id: number; link: string }[];
 }
+export interface ICategory {
+  id: number;
+  title: string;
+  description: string;
+  image:string,
+  status:number
+}

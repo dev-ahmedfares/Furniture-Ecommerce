@@ -1,18 +1,9 @@
 "use client";
-import { ICartProduct, IProduct } from "@/types";
-import Image from "next/image";
+import { ICartProduct } from "@/types";
 import React from "react";
 import { Button } from "./ui/button";
 import { GoTrash } from "react-icons/go";
 import AddToCartBtns from "./shared/AddToCartBtns";
-import { useAppDispatch, useAppSelector } from "@/store/hook";
-import {
-  actRemoveItemFromCart,
-  clearCartLocal,
-  removeItemLocal,
-} from "@/store/cart/cartSlice";
-import { toast } from "sonner";
-import actDestroyCart from "@/store/cart/act/actDestroyCart";
 import { useRemoveItemAndDestroyCart } from "@/hooks/useRemoveItemAndDestroyCart";
 
 function OrderCard({
@@ -60,7 +51,7 @@ function OrderCard({
                 disabled={loadingDeleteFromCart}
                 onClick={() => handleDeleteItemFromCart(order)}
                 size={"icon"}
-                className={`rounded-full   bg-transparent shadow-none !text-primary-100 disabled:!opacity-100 hover:!text-primary-100/90 hover:bg-transparent [&_svg]:size-5 dark:!bg-transparent`}
+                className={`rounded-full  transition-transform duration-200  active:scale-90 bg-transparent shadow-none !text-primary-100 disabled:!opacity-100 hover:!text-primary-100/90 hover:bg-transparent [&_svg]:size-5 dark:!bg-transparent`}
               >
                 <GoTrash />
               </Button>
@@ -76,8 +67,8 @@ function OrderCard({
         </div>
         <div>
           <div className="relative text-light800_light100 font-semibold ps-2 md:text-2xl">
-            {order.price}
-            <span className="absolute -top-1 -left-1 text-sm">€</span>
+            {Math.round(order.price)}
+            <span className="absolute -top-1 -left-1 rtl:-left-3 text-sm">€</span>
           </div>
         </div>
       </div>

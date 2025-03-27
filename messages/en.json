@@ -1,0 +1,165 @@
+{
+  "homePage": {
+    "navLinks": {
+      "home": "Home",
+      "shop": "Shop",
+      "langSwitcher": {
+        "ar": "Ar",
+        "en": "En"
+      },
+      "language": "Language",
+      "theme": "Theme",
+      "lightMode": "Light Mode",
+      "darkMode": "Dark Mode",
+      "logout": "Logout",
+      "signin": "Sign In"
+    },
+    "heroSection": {
+      "h1": "Make your interior more minimalistic & modern",
+      "p": "Turn your room with panto into a lot more minimalist and modern with ease and speed",
+      "search": "Search"
+    },
+    "outCategories": {
+      "span1": "Our",
+      "span2": "Categories",
+      "moreInfo": "More Info",
+      "h2One": "Furnish Your Dreams,",
+      "h2Two": "Choose Wisely",
+      "p2": "Discover quality furniture, curated styles, and exceptional service at Our Store. We make furnishing your home easy and enjoyable."
+    },
+    "featuresSection": {
+      "p": "Some of our",
+      "h1": "Features we offer to you",
+      "cardOne": {
+        "head": "Extensive Catalog",
+        "p": "A wide selection of furniture styles, categories, and price points."
+      },
+      "cardTwo": {
+        "head": "Detailed Product Descriptions",
+        "p": "Comprehensive information including dimensions, materials, care instructions, and warranty details."
+      },
+      "cardThree": {
+        "head": "Room Planner/Visualizer",
+        "p": "Tools to help customers visualize furniture in their own spaces."
+      }
+    },
+    "footer": {
+      "p": "The advantage of hiring a workspace with us is that gives you comfortable service and all-around facilities.",
+      "service": {
+        "h": "Service",
+        "opt1": "Email Marketing",
+        "opt2": "Campaigns",
+        "opt3": "Branding"
+      },
+      "furniture": {
+        "h": "Furniture",
+        "opt1": "Beds",
+        "opt2": "Chair",
+        "opt3": "All"
+      },
+      "follow": {
+        "h": "Follow Us",
+        "opt1": "Facebook",
+        "opt2": "Twitter",
+        "opt3": "Instagram"
+      },
+      "copyright": "Copyright © ",
+      "terms": "Terms & Conditions",
+      "privacy": "Privacy Policy"
+    },
+    "searchPopup": {
+      "h": "Chic Furnishings Online Furniture Store",
+      "p": "Discover Elegant Comfort for Every Room",
+      "search": "Search"
+    }
+  },
+  "addToCart": "Add to Cart",
+  "loading": "Loading",
+  "cartPage": {
+    "h1": "Your Cart",
+    "p": "Review Your Items",
+    "items": "items",
+    "placeOrder": "Place Order",
+    "total": "Total",
+    "clearCart": "Clear Cart",
+    "cartEmpty": "Cart is Empty",
+    "productAdded": "Product Added Successfully",
+    "productDecreased": "Product Decreased Successfully"
+  },
+  "signPage": {
+    "h1": "Welcome to Our store",
+    "p": "Bringing Your Style Home",
+    "signin": {
+      "label": "Sign in",
+      "h1": "I am already a customer",
+      "email": "Email Address",
+      "emailValid": "Email is required",
+      "emailValid2": "Invalid email format",
+      "password": "Password",
+      "passwordValid": "Password is required",
+      "btn": "Sign In",
+      "successLogin": "Successfully logged in",
+      "successOut": "Successfully logged out"
+    },
+    "signUp": {
+      "label": "Sign up",
+      "h1": "I am new to This store",
+      "p": "Enjoy exclusive discounts & offers",
+      "firstName": "First Name",
+      "firstNameValid": "First name must be at least 2 character(s)",
+      "lastName": "Last Name",
+      "lastNameValid": "List name must be at least 2 character(s)",
+      "email": "Email Address",
+      "emailValid": "Email is required",
+      "emailValid2": "Invalid email format",
+      "password": "Password",
+      "passwordValid": "Password must be at least 8 characters",
+      "passwordValid2": "Password can only contain letters and numbers",
+      "passwordValid3": "Password must contain at least one letter",
+      "passwordValid4": "Password must contain at least one number",
+      "btn": "Sign Up",
+      "successLogin": "Successfully logged in",
+      "agree": "Yes, I would like to receive personalized offers, tips and tricks, and other information from Store.",
+      "terms": "The terms and conditions for Dubai Perfumes apply. Here you can find our",
+      "privacy": "privacy information",
+      "or": "Or",
+      "signWith": "Sign Up With Google"
+    }
+  },
+  "placeOrder": {
+    "register": "Register",
+    "data": "Data",
+    "payment": "Payment",
+    "review": "Review",
+    "h11": "Welcome to Our store",
+    "p11": "Bringing Your Style Home",
+    "h1": "Your customer data for the order",
+    "p": "Bringing Your Style Home",
+    "next": "Next",
+    "prev": "Previous",
+    "form1": {
+      "h2": "Delivery address",
+      "city": "City",
+      "cityValid": "City is required",
+      "streetName": "Street Name",
+      "streetNameValid": "Street Name is required",
+      "buildingNum": "Building Number",
+      "buildingNumValid": "Building Number is required"
+    },
+    "form2": {
+      "h2": "Payment method",
+      "card": "Card Payment",
+      "paypal": "Paypal",
+      "paymentValid": "Payment method is required"
+    },
+    "form3": {
+      "h2": "Review order",
+      "p": "Dear customer, please check your information for accuracy.",
+      "address": "Delivery address",
+      "payment": "Payment",
+      "yourShopping": "your shopping cart",
+      "total": "Total",
+      "submit": "Submit"
+    }
+  }
+}

@@ -1,8 +1,19 @@
+"use client";
+import { useLocale } from "next-intl";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import React from "react";
 
-function SearchIcon({className}:{className?:string}) {
- 
+function SearchIcon({
+  className,
+  isPopup = false,
+}: {
+  className?: string;
+  isPopup?: boolean;
+}) {
+  const locale = useLocale();
+  const pathname = usePathname();
+  const isHomeSection = pathname === `/${locale}`;
   return (
     <div className={className}>
       <Image
@@ -10,14 +21,14 @@ function SearchIcon({className}:{className?:string}) {
         width={24}
         height={24}
         alt="search icon"
-        className="dark:hidden"
+        className={`${isHomeSection && !isPopup ? "hidden" : "dark:hidden"} `}
       />
       <Image
         src={"/assets/icons/search-dark.svg"}
         width={24}
         height={24}
         alt="search icon"
-        className="hidden dark:block"
+        className={`${isHomeSection && !isPopup ? "" : "hidden dark:block"} `}
       />
     </div>
   );

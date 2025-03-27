@@ -8,6 +8,7 @@ import actDecreaseItemQty from "./act/actDecreaseItemQty";
 import actRemoveItemFromCart from "./act/actRemoveItemFromCart";
 import actDestroyCart from "./act/actDestroyCart";
 import actGetOrderPrice from "./act/actGetOrderPrice";
+import actCreateOrder from "./act/actCreateOrder";
 
 interface IInitialState {
   items: ICartProduct[];
@@ -16,8 +17,8 @@ interface IInitialState {
   loadingAddToCart: boolean;
   loadingDeleteFromCart: boolean;
   loadingDestroyCart: boolean;
-  loadingIncrease:boolean;
-  loadingDecrease:boolean;
+  loadingIncrease: boolean;
+  loadingDecrease: boolean;
   error: string | null;
   totalPriceFromApi: number;
 }
@@ -29,8 +30,8 @@ const initialState: IInitialState = {
   loadingAddToCart: false,
   loadingDeleteFromCart: false,
   loadingDestroyCart: false,
-  loadingIncrease:false,
-  loadingDecrease:false,
+  loadingIncrease: false,
+  loadingDecrease: false,
   error: null,
   totalPriceFromApi: 0,
 };
@@ -268,9 +269,27 @@ const cartSlice = createSlice({
       })
       .addCase(actGetOrderPrice.fulfilled, (state, action) => {
         state.loading = false;
-        state.totalPriceFromApi = action.payload.grand_total;
+        if (action.payload.grand_total) {
+          state.totalPriceFromApi = action.payload.grand_total;
+        }
       })
       .addCase(actGetOrderPrice.rejected, (state, action) => {
+        state.loading = false;
+        if (isString(action.payload)) state.error = action.payload;
+      });
+    // Create Order
+    builder
+      .addCase(actCreateOrder.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(actCreateOrder.fulfilled, (state, action) => {
+        state.loading = false;
+        // if (action.payload.grand_total) {
+        //   state.totalPriceFromApi = action.payload.grand_total;
+        // }
+      })
+      .addCase(actCreateOrder.rejected, (state, action) => {
         state.loading = false;
         if (isString(action.payload)) state.error = action.payload;
       });
@@ -291,5 +310,6 @@ export {
   actDecreaseItemQty,
   actRemoveItemFromCart,
   actGetOrderPrice,
+  actCreateOrder,
 };
 export default cartSlice.reducer;

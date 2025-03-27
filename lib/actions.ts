@@ -16,7 +16,7 @@ export async function signUp({ data, userType }: ISignUpProps) {
 
     return res.data;
   } catch (error) {
-    console.log(error);
+    
     return axiosErrorHandler(error);
   }
 }
@@ -32,7 +32,7 @@ export async function signIn({ data, userType }: ISignInProps) {
 
     return res.data;
   } catch (error) {
-    console.log(error);
+
     return axiosErrorHandler(error);
   }
 }
@@ -48,7 +48,7 @@ export async function signOut({ accessToken, userType }: ISignOutProps) {
 
     return res.data;
   } catch (error) {
-    console.log(error);
+ 
     return axiosErrorHandler(error);
   }
 }

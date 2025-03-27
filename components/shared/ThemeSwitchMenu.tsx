@@ -4,24 +4,33 @@ import { Button } from "../ui/button";
 import { IoMoon } from "react-icons/io5";
 import { MdSunny } from "react-icons/md";
 import { GrCheckmark } from "react-icons/gr";
+import { useTranslations } from "next-intl";
 
-function ThemeSwitchMenu() {
+function ThemeSwitchMenu({
+  setShowMenu,
+}: {
+  setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+   const t = useTranslations("homePage.navLinks")
   const { setTheme, theme } = useTheme();
-// TODO remove return or fix it
-if (!theme) return null;
+  // TODO remove return or fix it
+  if (!theme) return null;
 
   return (
     <div>
-      <h4 className="font-medium text-xl">Theme</h4>
+      <h4 className="font-medium text-xl">{t("theme")}</h4>
       <div className="flex flex-col gap-1">
         <div className="border-b border-black/60 dark:border-light-100/60">
           <Button
             variant="ghost"
             className="my-2 w-full !justify-start relative"
-            onClick={() => setTheme("light")}
+            onClick={() => {
+              setTheme("light");
+              setShowMenu(false);
+            }}
           >
             <div className="flex items-center ps-8 gap-4 ">
-              { theme === "light" && (
+              {theme === "light" && (
                 <GrCheckmark
                   className="text-primary-100 start-4 absolute top-1/2 -translate-y-1/2"
                   size={24}
@@ -29,7 +38,7 @@ if (!theme) return null;
               )}
               <MdSunny className=" h-5 w-5  text-primary-100" />
               <span className="font-mont text-sm text-darkBlack_light100">
-                Light Mode
+              {t("lightMode")}
               </span>
             </div>
           </Button>
@@ -37,15 +46,18 @@ if (!theme) return null;
         <Button
           variant="ghost"
           className="my-2 w-full !justify-start relative"
-          onClick={() => setTheme("dark")}
+          onClick={() => {
+            setTheme("dark");
+            setShowMenu(false);
+          }}
         >
           <div className="flex items-center ps-8 gap-4 ">
-            { theme === "dark" && (
+            {theme === "dark" && (
               <GrCheckmark className="text-primary-100 start-4 absolute top-1/2 -translate-y-1/2" />
             )}
             <IoMoon className="h-[1.5rem] w-[1.3rem]  text-dark-300 dark:text-light-100" />
             <span className="font-mont text-sm text-darkBlack_light100 ">
-              Dark Mode
+            {t("darkMode")}
             </span>
           </div>
         </Button>

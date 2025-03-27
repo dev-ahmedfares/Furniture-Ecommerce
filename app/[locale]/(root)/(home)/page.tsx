@@ -7,31 +7,29 @@ import { IoIosArrowRoundForward } from "react-icons/io";
 import { CarouselItem } from "@/components/ui/carousel";
 import CustomCarousel from "@/components/CustomCarousle";
 import CategoriesList from "@/components/CategoriesList";
-
-
-
-const features = [
-  {
-    img: "/assets/images/feature-1.png",
-    label: "Extensive Catalog",
-    text: "A wide selection of furniture styles, categories, and price points.",
-  },
-  {
-    img: "/assets/images/feature-2.png",
-    label: "Detailed Product Descriptions",
-    text: "Comprehensive information including dimensions, materials, care instructions, and warranty details.",
-  },
-  {
-    img: "/assets/images/feature-3.png",
-    label: "Room Planner/Visualizer",
-    text: "Tools to help customers visualize furniture in their own spaces.",
-  },
-];
+import {  getTranslations } from "next-intl/server";
 
 
 async function Page() {
+  const t = await getTranslations("homePage");
 
- 
+  const features = [
+    {
+      img: "/assets/images/feature-1.png",
+      label: t("featuresSection.cardOne.head"),
+      text: t("featuresSection.cardOne.p"),
+    },
+    {
+      img: "/assets/images/feature-2.png",
+      label: t("featuresSection.cardTwo.head"),
+      text: t("featuresSection.cardTwo.p"),
+    },
+    {
+      img: "/assets/images/feature-3.png",
+      label: t("featuresSection.cardThree.head"),
+      text: t("featuresSection.cardThree.p"),
+    },
+  ];
 
   return (
     <>
@@ -39,11 +37,10 @@ async function Page() {
         <div className="w-full min-h-screen flex flex-col items-center bg-lightOverlay dark:bg-blackOverlay ">
           <div className="text-center mt-52 text-light-100">
             <h1 className="h1-bold xl:text-5xl  max-lg:max-w-[400px] max-w-[550px] capitalize">
-              Make your interior more minimalistic & modern
+              {t("heroSection.h1")}
             </h1>
             <p className="font-extrabold leading-[160%] max-md:text-sm  max-md:max-w-[280px] max-w-[400px] mt-4 mx-auto">
-              Turn your room with panto into a lot more minimalist and modern
-              with ease and speed
+              {t("heroSection.p")}
             </p>
           </div>
 
@@ -52,7 +49,7 @@ async function Page() {
             button={
               <div className="relative mt-12 xl:min-h-[32px] xl:min-w-[280px] min-h-[26px] min-w-[220px] flex items-center px-2 justify-between bg-light-850/20 backdrop-blur-[10px] rounded-full  ">
                 <span className="text-xs font-[300] font-mont text-light-100">
-                  Search
+                  {t("heroSection.search")}
                 </span>
                 <Image
                   src="/assets/icons/white-search.svg"
@@ -72,11 +69,11 @@ async function Page() {
         <div>
           <div className="container py-24 flex gap-16 xl:items-end max-xl:flex-col">
             <h2 className="font-extrabold flex gap-2 xl:flex-col max-xl:justify-center  max-md:text-3xl xl:pb-12 flex-1 text-4xl">
-              <span>Our</span>
-              <span>Categories</span>
+              <span>{t("outCategories.span1")}</span>
+              <span>{t("outCategories.span2")}</span>
             </h2>
             <div className="max-xl:flex-1">
-              <CategoriesList/>
+              <CategoriesList />
             </div>
           </div>
           <Image
@@ -111,21 +108,19 @@ async function Page() {
 
             <div className="flex flex-col">
               <h4 className="font-extrabold text-xl md:text-3xl mt-4">
-                Furnish Your Dreams,
+                {t("outCategories.h2One")}
                 <br />
-                Choose Wisely
+                {t("outCategories.h2Two")}
               </h4>
               <p className="  leading-[185%] text-sm my-4 max-w-[500px]">
-                Discover quality furniture, curated styles, and exceptional
-                service at Our Store. We make furnishing your home easy and
-                enjoyable.
+                {t("outCategories.p2")}
               </p>
               <Link
                 href={"/"}
                 className="font-medium group capitalize text-primary-100 flex items-center gap-2 mt-auto"
               >
-                <span>more info</span>
-                <span className="group-hover:animate-pulse">
+                <span>{t("outCategories.moreInfo")}</span>
+                <span className="group-hover:animate-pulse rtl:-rotate-180">
                   <IoIosArrowRoundForward size={20} />
                 </span>
               </Link>
@@ -139,10 +134,10 @@ async function Page() {
         <div className="container relative z-20 py-24">
           <div className="text-center mb-12 max-sm:mb-4">
             <p className="text-primary-100 mb-2 font-medium tracking-widest text-sm">
-              SOME OF OUR
+              {t("featuresSection.p")}
             </p>
             <h2 className="font-extrabold flex gap-2 xl:flex-col max-xl:justify-center  text-3xl xl:pb-12 flex-1 ">
-              Features we offer to you
+              {t("featuresSection.h1")}
             </h2>
           </div>
 

@@ -9,14 +9,7 @@ function page() {
   return (
     <section className="relative">
       <div className="container py-16 pt-[80px] md:pt-[140px]">
-        <div className="text-center">
-          <h1 className="h1-bold text-darkBlack_light100">
-            Welcome to Our store
-          </h1>
-          <p className="font-medium leading-[160%] text-light500_light100">
-            Bringing Your Style Home
-          </p>
-        </div>
+        
        
           <SignInAndUpForms />
       

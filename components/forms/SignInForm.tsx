@@ -20,20 +20,27 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ISignInProps } from "@/types";
 import { Spinner } from "../shared/Spinner";
-import { usePathname, useRouter } from "next/navigation";
+
 import { useAppDispatch } from "@/store/hook";
 import { storeUser } from "@/store/auth/authSlice";
 import { signIn } from "@/lib/actions";
+import { useTranslations } from "next-intl";
+import { usePathname, useRouter } from "@/i18n/navigation";
 
-const formSchema = z.object({
-  email: z
-    .string()
-    .min(1, { message: "Email is required" })
-    .email({ message: "Invalid email format" }),
-  password: z.string().min(1, { message: "Password is required" }),
-});
+
 
 function SignInForm() {
+
+
+  const t = useTranslations("signPage.signin")
+  const formSchema = z.object({
+    email: z
+      .string()
+      .min(1, { message: t("emailValid") })
+      .email({ message: t("emailValid2") }),
+    password: z.string().min(1, { message: t("passwordValid") }),
+  });
+
   const pathname = usePathname()
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -49,11 +56,11 @@ function SignInForm() {
     mutationKey: ["signUp"],
     mutationFn: (data: ISignInProps) => signIn(data),
     onSuccess: (data) => {
-      console.log(data);
+     
       if (data?.isSuccessful) {
         form.reset();
         dispatch(storeUser({ user: data.data, accessToken: data.data.token }));
-        toast.success("Successfully logged in");
+        toast.success(t("successLogin"));
         
         if (pathname === "/sign-up&in") {
           router.push("/");
@@ -80,10 +87,10 @@ function SignInForm() {
 
   
   return (
-    <div className="flex-1 flex flex-col  background-light200_dark200 p-8 rounded-[23px] min-h-[400px]">
+    <div className="flex-1 relative z-[1] flex flex-col  background-light200_dark200 p-8 rounded-[23px] min-h-[400px]">
       <div className="text-center min-h-28">
         <h3 className="font-bold text-2xl uppercase max-md:text-lg">
-          I am already a customer
+          {t("h1")}
         </h3>
       </div>
       <Form {...form}>
@@ -97,7 +104,7 @@ function SignInForm() {
             render={({ field, formState: { errors } }) => (
               <FormItem>
                 <FormControl>
-                  <div className="flex items-center flex-1">
+                  <div className="flex items-center flex-1 relative z-[1]">
                     <FaAt size={19} className="me-2 text-darkBlack_light100" />
 
                     <div className="relative flex-1">
@@ -106,14 +113,14 @@ function SignInForm() {
                         {...field}
                         className={`${
                           errors?.email ? "!border-red-100" : ""
-                        } rounded-none  text-darkBlack_light100 border-x-0 border-t-0 shadow-none !border-b-1 border-black dark:border-light-100   focus-visible:ring-0 `}
+                        } rounded-none relative z-20 text-darkBlack_light100 border-x-0 border-t-0 shadow-none !border-b-1 border-black dark:border-light-100   focus-visible:ring-0 `}
                       />
                       <FloatingLabel htmlFor="email-signin">
-                        Email Address
+                      {t("email")}
                         <span className="text-lg text-red-100">*</span>
                       </FloatingLabel>
                       {errors?.email && (
-                        <span className="absolute  top-1/2 right-2 -translate-y-1/2 text-red-100">
+                        <span className="absolute  top-1/2 right-2 rtl:right-auto rtl:left-2  -translate-y-1/2 text-red-100">
                           <AiOutlineWarning size={20} />
                         </span>
                       )}
@@ -139,6 +146,7 @@ function SignInForm() {
 
                     <div className="relative flex-1">
                       <PasswordInput
+                      placeText={t("password")}
                         idHtml={"signInPassword"}
                         customStyle={`${
                           errors?.password ? "!text-red-100" : ""
@@ -164,7 +172,7 @@ function SignInForm() {
             disabled={isPending}
             customStyle="[&_svg]:!size-5 !mt-auto"
           >
-            {isPending ? <Spinner /> : "Sign In"}
+            {isPending ? <Spinner /> : t("btn")}
           </BtnPrimary>
         </form>
       </Form>

@@ -26,13 +26,13 @@ export default function AuthContext({
     useState(false);
 
   const { data, status } = useSession();
-  console.log("data", data, status);
+
   const dispatch = useAppDispatch();
 
   const { accessToken, user } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
-    console.log(data, status)
+   
     // @ts-ignore
     if (status === "authenticated" && data?.accessToken ) {
       dispatch(

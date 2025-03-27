@@ -11,7 +11,7 @@ const actAddItemToCart = createAsyncThunk(
   async (item: ICartProduct, thunkAPI) => {
     const { rejectWithValue, getState } = thunkAPI;
     const { auth } = getState() as RootState;
-    console.log(item);
+
     try {
       // TODO Language
       const res = await axiosInstance.post(`api/cart/add-item`, item, {

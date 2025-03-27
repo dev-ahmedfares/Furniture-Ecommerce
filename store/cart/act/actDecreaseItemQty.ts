@@ -18,7 +18,7 @@ const actDecreaseItemQty = createAsyncThunk(
         },
       });
 
-      console.log(res);
+     
       return { isSuccessful: res?.data?.isSuccessful, item };
     } catch (error) {
       return rejectWithValue(axiosErrorHandler(error));

@@ -10,12 +10,13 @@ function MenubarContainer() {
   const [showMenu, setShowMenu] = useState(false);
   return (
     <ToggleMenubar
-    customStyle="block md:hidden"
+    customStyle="block lg:hidden  relative z-50"
       btnChild={<IoMenu className="text-primary-100  " />}
       setShowMenu={setShowMenu}
       showMenu={showMenu}
+      btnStyle="hover:!bg-transparent"
     >
-      <div className="container">
+      <div className="container relative z-20">
         <div className="flex items-center justify-between  min-h-[60px]">
           <Link href={"/"} className="font-agency dark:text-light-100">
             LOGO
@@ -29,7 +30,7 @@ function MenubarContainer() {
             <RxCross2 className="text-primary-100  " />
           </Button>
         </div>
-        <MobileMenu />
+        <MobileMenu setShowMenu={setShowMenu}/>
       </div>
     </ToggleMenubar>
   );

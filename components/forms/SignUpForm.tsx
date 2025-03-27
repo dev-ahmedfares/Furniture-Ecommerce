@@ -21,37 +21,47 @@ import { PasswordInput } from "../shared/PasswordInput";
 import { AiOutlineWarning } from "react-icons/ai";
 import Link from "next/link";
 import { Checkbox } from "../ui/checkbox";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { signInWithGoogle, signUp } from "@/lib/actions";
 import { ISignUpProps } from "@/types";
 import { toast } from "sonner";
 import { Spinner } from "../shared/Spinner";
 import { FcGoogle } from "react-icons/fc";
 import { usePathname } from "next/navigation";
-
-const formSchema = z.object({
-  firstName: z
-    .string()
-    .min(2, { message: "First name must be at least 2 character(s)" })
-    .max(50),
-  lastname: z
-    .string()
-    .min(2, { message: "List name must be at least 2 character(s)" })
-    .max(50),
-  email: z.string().email().min(2).max(50),
-  password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters" })
-    .regex(/^[A-Za-z0-9]+$/, {
-      message: "Password can only contain letters and numbers",
-    })
-    .regex(/[A-Za-z]/, { message: "Password must contain at least one letter" })
-    .regex(/[0-9]/, { message: "Password must contain at least one number" }),
-  receiveOffers: z.boolean().default(false).optional(),
-});
+import { useTranslations } from "next-intl";
 
 function SignUpForm() {
-  const pathname = usePathname()
+  
+  const t = useTranslations("signPage.signUp");
+
+  const formSchema = z.object({
+    firstName: z
+      .string()
+      .min(2, { message: t("firstNameValid") })
+      .max(50),
+    lastname: z
+      .string()
+      .min(2, { message: t("lastNameValid") })
+      .max(50),
+    email: z
+      .string()
+      .min(1, { message: t("emailValid") })
+      .email({ message: t("emailValid2") })
+      .max(50),
+    password: z
+      .string()
+      .min(8, { message: t("passwordValid") })
+      .regex(/^[A-Za-z0-9]+$/, {
+        message: t("passwordValid2"),
+      })
+      .regex(/[A-Za-z]/, {
+        message: t("passwordValid3"),
+      })
+      .regex(/[0-9]/, { message: t("passwordValid4") }),
+    receiveOffers: z.boolean().default(false).optional(),
+  });
+
+  const pathname = usePathname();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -67,7 +77,7 @@ function SignUpForm() {
     mutationKey: ["signUp"],
     mutationFn: (data: ISignUpProps) => signUp(data),
     onSuccess: (data) => {
-      console.log(data);
+      
       if (data?.isSuccessful) {
         form.reset();
         toast.success(data.message);
@@ -88,7 +98,7 @@ function SignUpForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+   
     const { receiveOffers, ...data } = values;
     mutate({ data: { name: data.firstName, ...data }, userType: "personal" });
   }
@@ -96,11 +106,9 @@ function SignUpForm() {
     <div className="flex-1  flex !min-h-full flex-col background-light200_dark200 p-8 rounded-[23px]">
       <div className="text-center min-h-28">
         <h3 className="font-bold text-2xl uppercase max-md:text-lg">
-          I am new to This store
+          {t("h1")}
         </h3>
-        <p className="font-mont text-sm mt-2">
-          Enjoy exclusive discounts & offers
-        </p>
+        <p className="font-mont text-sm mt-2">{t("p")} </p>
       </div>
       <Form {...form}>
         <form
@@ -113,7 +121,7 @@ function SignUpForm() {
             render={({ field, formState: { errors } }) => (
               <FormItem>
                 <FormControl>
-                  <div className="flex items-center flex-1">
+                  <div className="flex items-center relative z-[1] flex-1">
                     <div className="me-2 mt-4 flex justify-center items-center border-b-2 border-black dark:border-light-100 pb-[2px]">
                       <span className="w-3.5 h-3.5 rounded-full background-darkBlack_light100"></span>
                     </div>
@@ -123,14 +131,14 @@ function SignUpForm() {
                         {...field}
                         className={`${
                           errors?.firstName ? "!border-red-100" : ""
-                        } rounded-none  text-darkBlack_light100 border-x-0 border-t-0 shadow-none !border-b-1 border-black dark:border-light-100   focus-visible:ring-0 `}
+                        } rounded-none relative z-20 text-darkBlack_light100 border-x-0 border-t-0 shadow-none !border-b-1 border-black dark:border-light-100   focus-visible:ring-0 `}
                       />
                       <FloatingLabel htmlFor="firstName">
-                        First Name
+                        {t("firstName")}
                         <span className="text-lg text-red-100">*</span>
                       </FloatingLabel>
                       {errors?.firstName && (
-                        <span className="absolute  top-1/2 right-2 -translate-y-1/2 text-red-100">
+                        <span className="absolute  top-1/2  right-2 rtl:right-auto rtl:left-2 -translate-y-1/2 text-red-100">
                           <AiOutlineWarning size={20} />
                         </span>
                       )}
@@ -148,7 +156,7 @@ function SignUpForm() {
             render={({ field, formState: { errors } }) => (
               <FormItem>
                 <FormControl>
-                  <div className="flex items-center flex-1">
+                  <div className="flex items-center flex-1 relative z-[1]">
                     <div className="me-2 mt-4 flex justify-center items-center border-b-2 border-black dark:border-light-100 pb-[2px]">
                       <span className="w-3.5 h-3.5 rounded-full background-darkBlack_light100"></span>
                     </div>
@@ -158,14 +166,14 @@ function SignUpForm() {
                         {...field}
                         className={`${
                           errors?.lastname ? "!border-red-100" : ""
-                        } rounded-none  text-darkBlack_light100 border-x-0 border-t-0 shadow-none !border-b-1 border-black dark:border-light-100   focus-visible:ring-0 `}
+                        } rounded-none relative z-20 text-darkBlack_light100 border-x-0 border-t-0 shadow-none !border-b-1 border-black dark:border-light-100   focus-visible:ring-0 `}
                       />
                       <FloatingLabel htmlFor="lastname">
-                        Last Name
+                        {t("lastName")}
                         <span className="text-lg text-red-100">*</span>
                       </FloatingLabel>
                       {errors?.lastname && (
-                        <span className="absolute  top-1/2 right-2 -translate-y-1/2 text-red-100">
+                        <span className="absolute  top-1/2  right-2 rtl:right-auto rtl:left-2 -translate-y-1/2 text-red-100">
                           <AiOutlineWarning size={20} />
                         </span>
                       )}
@@ -183,7 +191,7 @@ function SignUpForm() {
             render={({ field, formState: { errors } }) => (
               <FormItem>
                 <FormControl>
-                  <div className="flex items-center flex-1">
+                  <div className="flex items-center flex-1 relative z-[1]">
                     <FaAt size={19} className="me-2 text-darkBlack_light100" />
 
                     <div className="relative flex-1">
@@ -192,14 +200,14 @@ function SignUpForm() {
                         {...field}
                         className={`${
                           errors?.email ? "!border-red-100" : ""
-                        } rounded-none  text-darkBlack_light100 border-x-0 border-t-0 shadow-none !border-b-1 border-black dark:border-light-100   focus-visible:ring-0 `}
+                        } rounded-none relative z-20 text-darkBlack_light100 border-x-0 border-t-0 shadow-none !border-b-1 border-black dark:border-light-100   focus-visible:ring-0 `}
                       />
                       <FloatingLabel htmlFor="email">
-                        Email Address
+                        {t("email")}
                         <span className="text-lg text-red-100">*</span>
                       </FloatingLabel>
                       {errors?.email && (
-                        <span className="absolute  top-1/2 right-2 -translate-y-1/2 text-red-100">
+                        <span className="absolute  top-1/2  right-2 rtl:right-auto rtl:left-2 -translate-y-1/2 text-red-100">
                           <AiOutlineWarning size={20} />
                         </span>
                       )}
@@ -217,14 +225,15 @@ function SignUpForm() {
             render={({ field, formState: { errors } }) => (
               <FormItem>
                 <FormControl>
-                  <div className="flex items-center flex-1">
+                  <div className="flex items-center flex-1 relative z-[1]">
                     <MdOutlineLock
                       size={22}
                       className="me-2 text-darkBlack_light100"
                     />
 
-                    <div className="relative flex-1">
+                    <div className="relative flex-1  ">
                       <PasswordInput
+                        placeText={t("password")}
                         idHtml={"signUpPassword"}
                         customStyle={`${
                           errors?.password ? "!text-red-100" : ""
@@ -249,26 +258,22 @@ function SignUpForm() {
             control={form.control}
             name="receiveOffers"
             render={({ field }) => (
-              <FormItem className="flex !mt-12 flex-row items-start space-x-3 space-y-0 rounded-md  ">
+              <FormItem className="flex gap-2 !mt-12 flex-row items-start space-x-3 space-y-0 rounded-md  ">
                 <FormControl>
                   <Checkbox
-                    className="mt-2 rounded-full data-[state=checked]:bg-primary-100 bg-light-950 border-light-950 data-[state=checked]:border-primary-100"
+                    className="mt-1 rounded-full data-[state=checked]:bg-primary-100 bg-light-950 border-light-950 data-[state=checked]:border-primary-100"
                     checked={field.value}
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
                 <div className="space-y-2  !leading-5 font-rubik text-darkBlack_light100">
-                  <FormLabel className="font-normal">
-                    Yes, I would like to receive personalized offers, tips and
-                    tricks, and other information from Store.
-                  </FormLabel>
+                  <FormLabel className="font-normal">{t("agree")}</FormLabel>
                   <FormDescription className="font-normal  text-darkBlack_light100 !text-sm">
                     <React.Fragment>
-                      The terms and conditions for Dubai Perfumes apply. Here
-                      you can find our
+                      {t("terms")}
                       <Link href="/" className="underline">
                         {" "}
-                        privacy information
+                        {t("privacy")}
                       </Link>
                     </React.Fragment>
                   </FormDescription>
@@ -277,7 +282,7 @@ function SignUpForm() {
             )}
           />
           <BtnPrimary disabled={isPending} customStyle="[&_svg]:!size-5">
-            {isPending ? <Spinner /> : "Sign Up"}
+            {isPending ? <Spinner /> : t("btn")}
           </BtnPrimary>
         </form>
       </Form>
@@ -285,15 +290,15 @@ function SignUpForm() {
       <div>
         <div className="h-[2px] relative  bg-black/30 dark:bg-light-100/30  my-8">
           <span className="font-semibold font-mont  left-1/2 absolute top-1/2 -translate-y-1/2 text-center w-[30%]  background-light200_dark200 -translate-x-1/2">
-            Or
+            {t("or")}
           </span>
         </div>
         <form
           className="flex items-center flex-col gap-4"
-          action={() => signInWithGoogle(pathname === "/sign-up&in" ? "/": "")}
+          action={() => signInWithGoogle(pathname === "/sign-up&in" ? "/" : "")}
         >
           <p className="capitalize font-mont text-darkBlack_light100">
-            Sign up with google
+            {t("signWith")}
           </p>
           <Button className="[&_svg]:size-9 rounded-full w-14 h-14 bg-light-100 hover:bg-light-100">
             <FcGoogle />

@@ -11,7 +11,7 @@ function ToggleTheme({ className }: { className?: string }) {
   if (!theme) return null;
   return (
     <Button
-      className={className}
+      className={`${className} hover:!bg-transparent`}
       variant="ghost"
       size="icon"
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}

@@ -6,10 +6,12 @@ import {
 } from "@/store/cart/cartSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { ICartProduct } from "@/types";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 export function useDecreaseCartItem() {
   const dispatch = useAppDispatch();
+  const t = useTranslations("cartPage")
   const { accessToken } = useAppSelector((state) => state.auth);
   const { loadingDecrease, items: cartItems } = useAppSelector(
     (state) => state.cart
@@ -20,14 +22,14 @@ export function useDecreaseCartItem() {
       dispatch(actDecreaseItemQty(item))
         .unwrap()
         .then(() => {
-          toast.success("Product Decreased Successfully");
+          toast.success(t("productDecreased"));
         })
         .catch((error) => {
           toast.error(error);
         });
     } else {
       dispatch(decreaseItemLocal(item));
-      toast.success("Product Decreased Successfully");
+      toast.success(t("productDecreased"));
     }
   };
 

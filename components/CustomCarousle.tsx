@@ -4,12 +4,8 @@ import * as React from "react";
 import {
   Carousel,
   CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 export default function CustomCarousel({
@@ -42,8 +38,8 @@ export default function CustomCarousel({
   }, [api]);
 
   return (
-    <div className="w-full max-w-4xl mx-auto py-10">
-      <Carousel className="w-full" setApi={setApi}>
+    <div dir="ltr" className="w-full max-w-4xl mx-auto py-10">
+      <Carousel dir="ltr" className="w-full" setApi={setApi}>
         <CarouselContent>{children}</CarouselContent>
         {/* <CarouselPrevious className="left-2" />
         <CarouselNext className="right-2" /> */}

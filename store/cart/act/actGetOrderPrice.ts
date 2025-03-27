@@ -26,8 +26,7 @@ const actGetOrderPrice = createAsyncThunk(
         },
       });
 
-      
-
+    
       return res?.data?.data;
     } catch (error) {
       return rejectWithValue(axiosErrorHandler(error));

@@ -2,15 +2,20 @@ import React from "react";
 import LinksList from "./LinksList";
 import LanguageSwitch from "./LanguageSwitch";
 import ThemeSwitchMenu from "./ThemeSwitchMenu";
+import SignInAndOutInfoMenubar from "./SignInAndOutInfoMenubar";
 
-function MobileMenu() {
+function MobileMenu({setShowMenu}: {
+  setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   return (
     <div>
-      <LinksList isCol/>
+      <LinksList isMenubar isCol setShowMenu={setShowMenu}/>
 
       <LanguageSwitch />
 
-      <ThemeSwitchMenu />  
+      <ThemeSwitchMenu setShowMenu={setShowMenu}/>
+
+      <SignInAndOutInfoMenubar setShowMenu={setShowMenu}/>
     </div>
   );
 }

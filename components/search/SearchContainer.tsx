@@ -2,12 +2,10 @@
 import React, { useState } from "react";
 
 import { RxCross2 } from "react-icons/rx";
-import { IoMenu } from "react-icons/io5";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import ToggleMenubar from "../shared/ToggleMenubar";
 import SearchPage from "./SearchPage";
-import SearchIcon from "./SearchIcon";
 import Image from "next/image";
 
 function SearchContainer({button,btnStyle}:{button:React.ReactNode,btnStyle?:string}) {

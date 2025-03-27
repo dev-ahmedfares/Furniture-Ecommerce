@@ -24,7 +24,7 @@ function ToggleMenubar({
         onClick={() => setShowMenu((curr: boolean) => !curr)}
         variant={"ghost"}
         size={"icon"}
-        className={`${btnStyle}  [&_svg]:!size-6`}
+        className={`  [&_svg]:!size-6 ${btnStyle}`}
       >
        {btnChild}
       </Button>

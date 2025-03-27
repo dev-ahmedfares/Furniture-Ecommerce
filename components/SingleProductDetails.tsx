@@ -10,11 +10,14 @@ import { getProductById } from "@/lib/data-service";
 import Loading from "./feedback/Loading";
 import { useAddToCartItem } from "@/hooks/useAddToCartItem";
 import { Spinner } from "./shared/Spinner";
+import { useLocale, useTranslations } from "next-intl";
 
 function SingleProductDetails({ id }: { id: string }) {
+  const t = useTranslations("")
+  const locale = useLocale()
   const { data, isError, error, isPending } = useQuery({
-    queryKey: ["product", id],
-    queryFn: () => getProductById({ productId: id }),
+    queryKey: ["product", id,locale],
+    queryFn: () => getProductById({ productId: id,locale }),
   });
 
   const { handleAddToCart, loadingCart, cartItems } = useAddToCartItem();
@@ -23,7 +26,7 @@ function SingleProductDetails({ id }: { id: string }) {
     ? data.quantity < currentItem.qty || data.quantity == currentItem.qty
     : false;
 
-  console.log(currentItem, data);
+
   return (
     <Loading
       status={isPending}
@@ -84,8 +87,8 @@ function SingleProductDetails({ id }: { id: string }) {
           <div className="flex justify-between items-center">
             <h2 className="h1-bold text-darkBlack_light100">{data?.title}</h2>
             <div className="relative text-light800_light100 font-semibold ps-2 text-2xl">
-              {data?.price}
-              <span className="absolute -top-1 -left-1 text-sm">€</span>
+              {Math.round(data?.price)}
+              <span className="absolute -top-1 -left-1 rtl:-left-3 text-sm">€</span>
             </div>
           </div>
           <div className="font-medium leading-[160%] text-sm mt-8 min-h-[140px] border-b border-light-400 dark:border-light-100">
@@ -128,7 +131,7 @@ function SingleProductDetails({ id }: { id: string }) {
               }
               customStyle="w-full rounded-full [&_svg]:!size-5"
             >
-              {loadingCart ? <Spinner /> : "Add to Cart"}
+              {loadingCart ? <Spinner /> : `${t("addToCart")}`}
             </BtnPrimary>
           )}
         </div>

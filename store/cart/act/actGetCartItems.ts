@@ -13,20 +13,20 @@ interface ICartItems {
 }
 const actGetCartItems = createAsyncThunk(
   "cart/actGetCartItems",
-  async (_, thunkAPI) => {
+  async (locale:string, thunkAPI) => {
     const { rejectWithValue, getState } = thunkAPI;
     const { auth } = getState() as RootState;
     try {
-      // TODO Language
+     
       const res = await axiosInstance.get(`/api/cart/items`, {
         headers: {
           "Country-Id": "1",
-          "Accept-Language": "ar",
+          "Accept-Language": locale,
           Authorization: `Bearer ${auth.accessToken}`,
         },
       });
 
-      console.log(res);
+      
       return res?.data?.data.cart_items.map((item: ICartItems) => {
         return {
           item_id: item.id,
