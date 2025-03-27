@@ -232,7 +232,7 @@ export default function FormStepper() {
 
           <div className="absolute w-full h-[2px] bg-muted rounded-full">
             <div
-              className="absolute top-0  left-0 h-[2px] bg-green-200 rounded-full transition-all duration-300"
+              className="absolute top-0 left-0  rtl:right-0 h-[2px] bg-green-200 rounded-full transition-all duration-300"
               style={{ width: `${(currentStep / (steps.length - 1)) * 100}%` }}
             ></div>
           </div>
