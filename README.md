@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
+<!-- <a href="https://fullstack-ecommerce-react-dotnet.netlify.app/"><img  src="/public/Background.png" width="120" height="auto"/></a> -->
+<h2></h2>
+<h2><a href="https://furniture-ecommerce-mauve.vercel.app/">E-commerce App by Nextjs </a></h2>
+<h4>Developed a full-stack e-commerce web app using Next.js with a separate RESTful API backend. Features include multi-language support (Arabic & English), dark/light theme, category browsing, shopping cart, and Stripe payment integration. Integrated authentication via NextAuth (Google sign-in) and custom login/signup. Used React Query for data fetching and Redux Toolkit (with persistence) for state management.
+</h4>
+</div>
+<!-- <h2></h2>  -->
+<!-- <center><a href="https://furniture-ecommerce-mauve.vercel.app/"><img src="/public/Background.png"/></a></center> -->
 
-## Getting Started
 
-First, run the development server:
+## Technologies Used
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Frontend: Next.js, React, Tailwind CSS
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- State Management: Redux Toolkit (with persistence)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Data Fetching: React Query
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Authentication: NextAuth (Google OAuth), custom auth
 
-## Learn More
+- Payment: Stripe
 
-To learn more about Next.js, take a look at the following resources:
+- i18n: Next.js Internationalization (Arabic & English)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Theming: Tailwind + custom dark/light mode
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Backend: External RESTful API 
 
-## Deploy on Vercel
+<h2>Features</h2>
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Category Page – Browse products by categories
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Shopping Cart – Add/remove items with persisted state
+
+- Stripe Integration – Secure payment processing
+
+- Dark/Light Theme toggle
+
+- Multi-language Support – Arabic and English
+
+- Authentication
+
+- Google sign-in via NextAuth
+
+- Custom login and registration
+
+- Persistent State Management using Redux Toolkit
+
+- Data Fetching with React Query
+
+
+
+
+<h2>Contact</h2>
+
+If you have any questions or need more information, please feel free to contact us:
+
+- **Email:** ahmedfaresss417@gmail.com
+- **LinkedIn:** https://www.linkedin.com/in/dev-ahmedfares/
